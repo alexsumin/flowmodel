@@ -17,6 +17,7 @@ import javafx.stage.FileChooser;
 import ru.alexsumin.Main;
 import ru.alexsumin.model.Data;
 import ru.alexsumin.model.Result;
+import ru.alexsumin.util.ReportGenerator;
 
 import javax.imageio.ImageIO;
 import java.io.File;
@@ -57,6 +58,9 @@ public class ModelOverviewController {
     private Button runChartTemp, clearTempChart, clearViscChart, runChartViscos;
 
     @FXML
+    private Button reportButton;
+
+    @FXML
     private Label timeCalculate;
 
     @FXML
@@ -66,6 +70,8 @@ public class ModelOverviewController {
     private FileChooser fileChooser = new FileChooser();
 
     private Main main;
+
+    private ReportGenerator report = new ReportGenerator();
 
     public ModelOverviewController() {
     }
@@ -177,7 +183,7 @@ public class ModelOverviewController {
 
     @FXML
     public void calculate(final ActionEvent event) {
-        long time = System.currentTimeMillis();
+        long startTime = System.currentTimeMillis();
 
         double usersData[] = new double[14];
 
@@ -208,13 +214,16 @@ public class ModelOverviewController {
         */
 
         Data dt = new Data(usersData);
-        results = FXCollections.observableArrayList(dt.getValues());
+        results = FXCollections.observableArrayList(dt.getResults());
         tableWithResult.setItems(results);
         performField.setText(String.valueOf((int) dt.getCanalPerformance()));
         lastTemperField.setText(String.valueOf(dt.getCurrentTemperature()));
         lastViscField.setText(String.valueOf((int) dt.getCurrentViscosity()));
         timeCalculate.setVisible(true);
-        timeCalculate.setText("Время расчета: " + (System.currentTimeMillis() - time) + "мс");
+        long totalTime = System.currentTimeMillis() - startTime;
+        timeCalculate.setText("Время расчета: " + totalTime + "мс");
+        report.setValues(dt.getValues());
+        report.setListOfResults(results);
     }
 
     private void plot(XYChart.Data[] points, String name, LineChart lineChart) {
@@ -275,6 +284,11 @@ public class ModelOverviewController {
         table_context_menu.show(vbox.getScene().getWindow(), event.getScreenX(), event.getScreenY());
     }
 
+    @FXML
+    public void generateReport(final ActionEvent event) {
+        report.create();
+
+    }
 
     @FXML
     public void exitProgram(final ActionEvent e) {

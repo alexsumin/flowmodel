@@ -143,12 +143,33 @@ public class Data {
         calcCanalPerformance();
     }
 
-    public ArrayList getValues() {
+    public List getValues() {
+        List<Double> values = new ArrayList<>();
+        values.add(width);
+        values.add(length);
+        values.add(depth);
+        values.add(density);
+        values.add(capacity);
+        values.add(meltingTemperature);
+        values.add(coverSpeed);
+        values.add(coverTemperature);
+        values.add(consistenceFactor);
+        values.add(viscosityFactor);
+        values.add(reductionTemperature);
+        values.add(flowIndex);
+        values.add(emissionFactor);
+        values.add(currentTemperature);
+        values.add(currentViscosity);
+        values.add(canalPerformance);
+        return values;
+    }
+
+    public ArrayList getResults() {
         List<Result> results = new ArrayList<>();
         calcIntermediate();
         for (int i = 0; i <= numberOfIterations; i++) {
             calcOutput(currentLength);
-            Result result = new Result(this.currentLength, getCurrentTemperature(), getCurrentViscosity());
+            Result result = new Result(currentLength, currentTemperature, currentViscosity);
             results.add(result);
             this.currentLength += lengthStep;
         }
