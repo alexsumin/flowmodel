@@ -7,6 +7,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.image.WritableImage;
@@ -22,6 +23,7 @@ import ru.alexsumin.util.ReportGenerator;
 import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
+import java.util.function.UnaryOperator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -31,6 +33,25 @@ import java.util.regex.Pattern;
 public class ModelOverviewController {
     @FXML
     TableView<Result> tableWithResult;
+    UnaryOperator<TextFormatter.Change> filter = t -> {
+
+        if (t.isReplaced())
+            if (t.getText().matches("[^0-9]"))
+                t.setText(t.getControlText().substring(t.getRangeStart(), t.getRangeEnd()));
+
+
+        if (t.isAdded()) {
+            if (t.getControlText().contains(".")) {
+                if (t.getText().matches("[^0-9]")) {
+                    t.setText("");
+                }
+            } else if (t.getText().matches("[^0-9.]")) {
+                t.setText("");
+            }
+        }
+
+        return t;
+    };
     private ObservableList<Result> results = FXCollections.observableArrayList();
     @FXML
     private LineChart viscosityChart;
@@ -50,28 +71,28 @@ public class ModelOverviewController {
     private TextField speedCoverField, coverTemperatureField, viscosityFactorField;
     @FXML
     private TextField reductionTemperatureField, indexOfMaterialField, emissionFactorField, consFactorWithReductionField;
-
     @FXML
     private TextField performField, lastTemperField, lastViscField;
-
     @FXML
     private Button runChartTemp, clearTempChart, clearViscChart, runChartViscos;
-
     @FXML
     private Button reportButton;
-
     @FXML
     private Label timeCalculate;
-
     @FXML
     private VBox vbox;
     @FXML
     private ContextMenu table_context_menu, chart_context_menu;
     private FileChooser fileChooser = new FileChooser();
-
     private Main main;
-
     private ReportGenerator report = new ReportGenerator();
+    private double stepForLegend;
+    @FXML
+    private Button saveTemperChart, saveViscosChart;
+    @FXML
+    private NumberAxis xAis1, xAxis2;
+    @FXML
+    private NumberAxis yAxis1, yAxis2;
 
     public ModelOverviewController() {
     }
@@ -98,7 +119,6 @@ public class ModelOverviewController {
 
     }
 
-
     @FXML
     private void initialize() {
         initColumn();
@@ -112,16 +132,35 @@ public class ModelOverviewController {
         createDefenceFromStupid(stepField);
         timeCalculate.setVisible(false);
 
+        yAxis1.setAutoRanging(false);
+        yAxis2.setAutoRanging(false);
+
+        /*
+        yAxis.setUpperBound(2100);
+        yAxis.setLowerBound(1200;
+        yAxis.setTickUnit(100);
+        */
+        tempChart.getXAxis().setLabel("Длина канала, м");
+        tempChart.getYAxis().setLabel("Температура, °С");
+        viscosityChart.getXAxis().setLabel("Длина канала, м");
+        viscosityChart.getYAxis().setLabel("Вязкость, Па∙с");
+
+
 
     }
 
+    private void createDefenceFromStupid(TextField textField) {
+        textField.setTextFormatter(new TextFormatter<>(filter));
+
+    }
+    /*
     private void createDefenceFromStupid(TextField textField) {
         final Pattern pattern = Pattern.compile("[0-9]{1,}[\\.,]{0,1}[0-9]{0,1}");
 
         textField.textProperty().addListener((observable, oldValue, newValue) -> {
             Matcher matcher = pattern.matcher(newValue);
             if (!newValue.isEmpty()) {
-                if (!matcher.matches()) {
+                if ((!matcher.matches()) || (newValue == "0.0")) {
                     textField.setText(oldValue);
                 } else {
                     try {
@@ -136,7 +175,12 @@ public class ModelOverviewController {
             }
         });
 
+
     }
+
+    */
+
+
 
 
     /*
@@ -146,8 +190,23 @@ public class ModelOverviewController {
                 textField.setText(newValue.replaceAll("[^\\d]", ""));
             }
         }
-    )}
+    );}
     */
+
+    /*
+    private void createDefenceFromStupid(TextField textField) {
+    textField.textProperty().addListener(( observable, oldValue, newValue) -> {
+            if (newValue.matches("\\d+(\\.\\d{2})?|\\.\\d{2}")) {
+                textField.setText(newValue);
+            }
+            else {
+                textField.setText(oldValue);
+            }
+        }
+    );}
+    */
+
+
     private void initContextMenuChart() {
 
         MenuItem save_chart = new MenuItem("Сохранить как изображение");
@@ -190,6 +249,7 @@ public class ModelOverviewController {
         //TODO: переделать с использование  цикла
         //в цикле выкидывает nullPointerException, мб textfield не имплементирует iterable?
         usersData[0] = Double.parseDouble(stepField.getText());
+        stepForLegend = Double.parseDouble(stepField.getText());
         usersData[1] = Double.parseDouble(widthField.getText());
         usersData[2] = Double.parseDouble(lengthField.getText());
         usersData[3] = Double.parseDouble(depthField.getText());
@@ -224,6 +284,18 @@ public class ModelOverviewController {
         timeCalculate.setText("Время расчета: " + totalTime + "мс");
         report.setValues(dt.getValues());
         report.setListOfResults(results);
+
+
+        yAxis2.setUpperBound(Math.rint(results.get(0).getViscosity() * 1.03));
+        yAxis2.setLowerBound(Math.rint(results.get(results.size() - 1).getViscosity() * 0.97));
+        yAxis2.setTickUnit(Math.rint((yAxis2.getUpperBound() - yAxis2.getLowerBound()) / 10));
+
+        yAxis1.setLowerBound(Math.rint(results.get(0).getTemperature() * 0.97));
+        yAxis1.setUpperBound(Math.rint(results.get(results.size() - 1).getTemperature() * 1.03));
+        yAxis1.setTickUnit(Math.rint((yAxis1.getUpperBound() - yAxis1.getLowerBound()) / 10));
+
+
+
     }
 
     private void plot(XYChart.Data[] points, String name, LineChart lineChart) {
@@ -254,7 +326,7 @@ public class ModelOverviewController {
             tmp = results.get(i);
             resultsTemper[i] = new XYChart.Data(tmp.getStep(), tmp.getTemperature());
         }
-        plot(resultsTemper, "first chart ", tempChart);
+        plot(resultsTemper, "При шаге " + stepForLegend, tempChart);
 
     }
 
@@ -266,7 +338,7 @@ public class ModelOverviewController {
             tmp = results.get(i);
             resultsTemper[i] = new XYChart.Data(tmp.getStep(), tmp.getViscosity());
         }
-        plot(resultsTemper, "При шаге ", viscosityChart);
+        plot(resultsTemper, "При шаге " + stepForLegend, viscosityChart);
 
     }
 

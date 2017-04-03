@@ -660,18 +660,18 @@
                                             <children>
                                                 <LineChart fx:id="tempChart">
                                                     <xAxis>
-                                                        <NumberAxis label="" side="LEFT" fx:id="xAxis"/>
+                                                        <NumberAxis label="" side="LEFT" fx:id="xAxis1"/>
                                                     </xAxis>
                                                     <yAxis>
-                                                        <NumberAxis fx:id="yAxis" label="" side="LEFT"/>
+                                                        <NumberAxis fx:id="yAxis1" label="" side="LEFT"/>
                                                     </yAxis>
                                                 </LineChart>
                                                 <LineChart fx:id="viscosityChart" GridPane.columnIndex="1">
                                                     <xAxis>
-                                                        <NumberAxis label="" side="LEFT" fx:id="xAxis"/>
+                                                        <NumberAxis label="" side="LEFT" fx:id="xAxis2"/>
                                                     </xAxis>
                                                     <yAxis>
-                                                        <NumberAxis fx:id="yAxis" label="" side="LEFT"/>
+                                                        <NumberAxis fx:id="yAxis2" label="" side="LEFT"/>
                                                     </yAxis>
                                                 </LineChart>
                                                 <GridPane GridPane.rowIndex="1">
