@@ -4,16 +4,22 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Cursor;
+import javafx.scene.Node;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import ru.alexsumin.Main;
 import ru.alexsumin.model.Data;
@@ -23,6 +29,10 @@ import ru.alexsumin.util.ReportGenerator;
 import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
+import java.text.DecimalFormatSymbols;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 import java.util.function.UnaryOperator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -34,6 +44,8 @@ public class ModelOverviewController {
     @FXML
     TableView<Result> tableWithResult;
     UnaryOperator<TextFormatter.Change> filter = t -> {
+        DecimalFormatSymbols decimal = new DecimalFormatSymbols(Locale.getDefault());
+        String sep = String.valueOf(decimal.getDecimalSeparator());
 
         if (t.isReplaced())
             if (t.getText().matches("[^0-9]"))
@@ -41,7 +53,7 @@ public class ModelOverviewController {
 
 
         if (t.isAdded()) {
-            if (t.getControlText().contains(".")) {
+            if (t.getControlText().contains(sep)) {
                 if (t.getText().matches("[^0-9]")) {
                     t.setText("");
                 }
@@ -52,11 +64,13 @@ public class ModelOverviewController {
 
         return t;
     };
+    @FXML
+    Label lbl;
     private ObservableList<Result> results = FXCollections.observableArrayList();
     @FXML
-    private LineChart viscosityChart;
+    private LineChart<Number, Number> viscosityChart;
     @FXML
-    private LineChart tempChart;
+    private LineChart<Number, Number> tempChart;
     @FXML
     private TableColumn<Result, Number> stepColumn;
     @FXML
@@ -73,6 +87,9 @@ public class ModelOverviewController {
     private TextField reductionTemperatureField, indexOfMaterialField, emissionFactorField, consFactorWithReductionField;
     @FXML
     private TextField performField, lastTemperField, lastViscField;
+    private TextField[] fields = {stepField, widthField, lengthField, depthField, densityField, capacityField, meltingTemperatureField,
+            reductionTemperatureField, indexOfMaterialField, emissionFactorField, consFactorWithReductionField,
+            performField, lastTemperField, lastViscField};
     @FXML
     private Button runChartTemp, clearTempChart, clearViscChart, runChartViscos;
     @FXML
@@ -86,7 +103,6 @@ public class ModelOverviewController {
     private FileChooser fileChooser = new FileChooser();
     private Main main;
     private ReportGenerator report = new ReportGenerator();
-    private double stepForLegend;
     @FXML
     private Button saveTemperChart, saveViscosChart;
     @FXML
@@ -121,6 +137,7 @@ public class ModelOverviewController {
 
     @FXML
     private void initialize() {
+
         initColumn();
 
         tableWithResult.setEditable(true);
@@ -135,77 +152,32 @@ public class ModelOverviewController {
         yAxis1.setAutoRanging(false);
         yAxis2.setAutoRanging(false);
 
-        /*
-        yAxis.setUpperBound(2100);
-        yAxis.setLowerBound(1200;
-        yAxis.setTickUnit(100);
-        */
         tempChart.getXAxis().setLabel("Длина канала, м");
         tempChart.getYAxis().setLabel("Температура, °С");
         viscosityChart.getXAxis().setLabel("Длина канала, м");
         viscosityChart.getYAxis().setLabel("Вязкость, Па∙с");
 
 
-
     }
 
     private void createDefenceFromStupid(TextField textField) {
         textField.setTextFormatter(new TextFormatter<>(filter));
-
-    }
-    /*
-    private void createDefenceFromStupid(TextField textField) {
-        final Pattern pattern = Pattern.compile("[0-9]{1,}[\\.,]{0,1}[0-9]{0,1}");
-
         textField.textProperty().addListener((observable, oldValue, newValue) -> {
-            Matcher matcher = pattern.matcher(newValue);
-            if (!newValue.isEmpty()) {
-                if ((!matcher.matches()) || (newValue == "0.0")) {
-                    textField.setText(oldValue);
-                } else {
-                    try {
-                        // тут можете парсить строку как захотите
-                        double value = Double.parseDouble(newValue);
-                        textField.setText("" + value);
+            if (newValue.isEmpty() || (newValue.equals("0.0")) || (newValue.equals("0")) || (newValue.equals("0."))
+                    || (Double.parseDouble(newValue) > Double.parseDouble(lengthField.getText()))) {
+                textField.setText(oldValue);
+            } else {
+                try {
+                    // тут можете парсить строку как захотите
+                    double value = Double.parseDouble(newValue);
+                    textField.setText("" + value);
 
-                    } catch (NumberFormatException e) {
-                        textField.setText(oldValue);
-                    }
+                } catch (NumberFormatException e) {
+                    textField.setText(oldValue);
                 }
             }
         });
-
-
     }
-
-    */
-
-
-
-
-    /*
-    private void createDefenceFromStupid(TextField textField) {
-    textField.textProperty().addListener(( observable, oldValue, newValue) -> {
-            if (!newValue.matches("\\d*")) {
-                textField.setText(newValue.replaceAll("[^\\d]", ""));
-            }
-        }
-    );}
-    */
-
-    /*
-    private void createDefenceFromStupid(TextField textField) {
-    textField.textProperty().addListener(( observable, oldValue, newValue) -> {
-            if (newValue.matches("\\d+(\\.\\d{2})?|\\.\\d{2}")) {
-                textField.setText(newValue);
-            }
-            else {
-                textField.setText(oldValue);
-            }
-        }
-    );}
-    */
-
 
     private void initContextMenuChart() {
 
@@ -245,11 +217,9 @@ public class ModelOverviewController {
         long startTime = System.currentTimeMillis();
 
         double usersData[] = new double[14];
-
         //TODO: переделать с использование  цикла
         //в цикле выкидывает nullPointerException, мб textfield не имплементирует iterable?
         usersData[0] = Double.parseDouble(stepField.getText());
-        stepForLegend = Double.parseDouble(stepField.getText());
         usersData[1] = Double.parseDouble(widthField.getText());
         usersData[2] = Double.parseDouble(lengthField.getText());
         usersData[3] = Double.parseDouble(depthField.getText());
@@ -264,14 +234,14 @@ public class ModelOverviewController {
         usersData[12] = Double.parseDouble(emissionFactorField.getText());
         usersData[13] = Double.parseDouble(consFactorWithReductionField.getText());
 
-        /*
-        double usersData[] = {1,2,3,4,5,6,7,8,9,10,11,12,13,14};
-        for (int i = 0; i < fields.length; i++) {
-            //usersData[i] = (Double.parseDouble(fields[i].getText()));
-            System.out.println(Double.parseDouble(fields[i].getText()));
 
-        }
-        */
+//        double usersData[] = new double[fields.length];
+//        for (int i = 0; i < usersData.length; i++) {
+//            usersData[i] =  Double.parseDouble(fields[i].getText());
+//            System.out.println(Double.parseDouble(fields[i].getText()));
+//
+//        }
+
 
         Data dt = new Data(usersData);
         results = FXCollections.observableArrayList(dt.getResults());
@@ -295,28 +265,28 @@ public class ModelOverviewController {
         yAxis1.setTickUnit(Math.rint((yAxis1.getUpperBound() - yAxis1.getLowerBound()) / 10));
 
 
-
     }
 
-    private void plot(XYChart.Data[] points, String name, LineChart lineChart) {
-        XYChart.Series series = new XYChart.Series();
+    private void plot(XYChart.Data[] points, LineChart lineChart) {
+        XYChart.Series<Double, Double> series = new XYChart.Series();
+
         series.getData().addAll(points);
-        series.setName(name);
         lineChart.getData().addAll(series);
-        points = null;
-    }
-    /*
-    public void activateTemperatureChart(){
-        int len = results.size();
-        XYChart.Data[] resultsTemper = new XYChart.Data[len];
-        Result tmp;
-        for(int i = 0; i < len;i++){
-            tmp = results.get(i);
-            resultsTemper[i] = new XYChart.Data(tmp.get(0),tmp.get(1));
-        }
-        plot(resultsTemper, "temperatureChart");
+        lineChart.setLegendVisible(false);
 
-    }*/
+        for (XYChart.Data<Double, Double> s : series.getData()) {
+            s.getNode().addEventHandler(MouseEvent.MOUSE_MOVED, event -> {
+                lbl.setText("" + s.getXValue() + " " + s.getYValue());
+                Tooltip tooltip = new Tooltip("" + s.getXValue() + " " + s.getYValue());
+
+                Tooltip.install(s.getNode(), tooltip);
+
+            });
+        }
+        points = null;
+
+    }
+
 
     public void drawTemperatureChart(final ActionEvent e) {
         int len = results.size();
@@ -326,7 +296,8 @@ public class ModelOverviewController {
             tmp = results.get(i);
             resultsTemper[i] = new XYChart.Data(tmp.getStep(), tmp.getTemperature());
         }
-        plot(resultsTemper, "При шаге " + stepForLegend, tempChart);
+        plot(resultsTemper, tempChart);
+
 
     }
 
@@ -338,7 +309,7 @@ public class ModelOverviewController {
             tmp = results.get(i);
             resultsTemper[i] = new XYChart.Data(tmp.getStep(), tmp.getViscosity());
         }
-        plot(resultsTemper, "При шаге " + stepForLegend, viscosityChart);
+        plot(resultsTemper, viscosityChart);
 
     }
 
@@ -362,10 +333,12 @@ public class ModelOverviewController {
 
     }
 
+
     @FXML
     public void exitProgram(final ActionEvent e) {
         System.exit(0);
     }
-}
 
+
+}
 

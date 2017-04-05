@@ -733,6 +733,7 @@
                                                                 </Button>
                                                             </children>
                                                         </HBox>
+                                                        <Label fx:id="lbl" text="Label" GridPane.columnIndex="2"/>
                                                     </children>
                                                 </GridPane>
                                                 <GridPane layoutX="10.0" layoutY="582.0" GridPane.columnIndex="1"
