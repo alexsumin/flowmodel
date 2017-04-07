@@ -25,6 +25,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
+<?import java.util.ArrayList?>
 <VBox xmlns:fx="http://javafx.com/fxml/1" fx:id="vbox" prefHeight="800.0" prefWidth="1280.0"
       xmlns="http://javafx.com/javafx/8.0.111" fx:controller="ru.alexsumin.view.ModelOverviewController">
     <children>
@@ -812,4 +813,23 @@
     <stylesheets>
         <URL value="@ModelOverview.css"/>
     </stylesheets>
+    <fx:define>
+        <ArrayList fx:id="fields">
+            <fx:reference source="stepField"/>
+            <fx:reference source="widthField"/>
+            <fx:reference source="lengthField"/>
+            <fx:reference source="depthField"/>
+            <fx:reference source="densityField"/>
+            <fx:reference source="capacityField"/>
+            <fx:reference source="meltingTemperatureField"/>
+            <fx:reference source="speedCoverField"/>
+            <fx:reference source="coverTemperatureField"/>
+            <fx:reference source="viscosityFactorField"/>
+            <fx:reference source="reductionTemperatureField"/>
+            <fx:reference source="indexOfMaterialField"/>
+            <fx:reference source="emissionFactorField"/>
+            <fx:reference source="emissionFactorField"/>
+            <fx:reference source="consFactorWithReductionField"/>
+        </ArrayList>
+    </fx:define>
 </VBox>

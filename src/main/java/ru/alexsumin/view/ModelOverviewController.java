@@ -87,9 +87,14 @@ public class ModelOverviewController {
     private TextField reductionTemperatureField, indexOfMaterialField, emissionFactorField, consFactorWithReductionField;
     @FXML
     private TextField performField, lastTemperField, lastViscField;
-    private TextField[] fields = {stepField, widthField, lengthField, depthField, densityField, capacityField, meltingTemperatureField,
-            reductionTemperatureField, indexOfMaterialField, emissionFactorField, consFactorWithReductionField,
-            performField, lastTemperField, lastViscField};
+    @FXML
+    private ArrayList<TextField> fields; //= {stepField, widthField, lengthField, depthField, densityField, capacityField, meltingTemperatureField,
+//            reductionTemperatureField, indexOfMaterialField, emissionFactorField, consFactorWithReductionField,
+//            performField, lastTemperField, lastViscField};
+
+    //    private TextField[] fields = {stepField, widthField, lengthField, depthField, densityField, capacityField, meltingTemperatureField,
+//            reductionTemperatureField, indexOfMaterialField, emissionFactorField, consFactorWithReductionField,
+//            performField, lastTemperField, lastViscField};
     @FXML
     private Button runChartTemp, clearTempChart, clearViscChart, runChartViscos;
     @FXML
@@ -137,6 +142,9 @@ public class ModelOverviewController {
 
     @FXML
     private void initialize() {
+//        fields = new TextField[]{widthField, lengthField, depthField, densityField, capacityField, meltingTemperatureField,
+//           reductionTemperatureField, indexOfMaterialField, emissionFactorField, consFactorWithReductionField,
+//            performField, lastTemperField, lastViscField};
 
         initColumn();
 
@@ -146,7 +154,12 @@ public class ModelOverviewController {
         initContextMenuTable();
 
         //initContextMenuChart();
-        createDefenceFromStupid(stepField);
+
+        for (TextField tf :
+                fields) {
+            createDefenceFromStupid(tf);
+        }
+        createDefenceFromStupid(stepField, Double.parseDouble(lengthField.getText()));
         timeCalculate.setVisible(false);
 
         yAxis1.setAutoRanging(false);
@@ -160,15 +173,31 @@ public class ModelOverviewController {
 
     }
 
-    private void createDefenceFromStupid(TextField textField) {
+    private void createDefenceFromStupid(TextField textField, double maxValue) {
         textField.setTextFormatter(new TextFormatter<>(filter));
         textField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.isEmpty() || (newValue.equals("0.0")) || (newValue.equals("0")) || (newValue.equals("0."))
-                    || (Double.parseDouble(newValue) > Double.parseDouble(lengthField.getText()))) {
+                    || (Double.parseDouble(newValue) > maxValue)) {
                 textField.setText(oldValue);
             } else {
                 try {
-                    // тут можете парсить строку как захотите
+                    double value = Double.parseDouble(newValue);
+                    textField.setText("" + value);
+
+                } catch (NumberFormatException e) {
+                    textField.setText(oldValue);
+                }
+            }
+        });
+    }
+
+    private void createDefenceFromStupid(TextField textField) {
+        textField.setTextFormatter(new TextFormatter<>(filter));
+        textField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.isEmpty() || (newValue.equals("0.0")) || (newValue.equals("0")) || (newValue.equals("0."))) {
+                textField.setText(oldValue);
+            } else {
+                try {
                     double value = Double.parseDouble(newValue);
                     textField.setText("" + value);
 
@@ -219,28 +248,28 @@ public class ModelOverviewController {
         double usersData[] = new double[14];
         //TODO: переделать с использование  цикла
         //в цикле выкидывает nullPointerException, мб textfield не имплементирует iterable?
-        usersData[0] = Double.parseDouble(stepField.getText());
-        usersData[1] = Double.parseDouble(widthField.getText());
-        usersData[2] = Double.parseDouble(lengthField.getText());
-        usersData[3] = Double.parseDouble(depthField.getText());
-        usersData[4] = Double.parseDouble(densityField.getText());
-        usersData[5] = Double.parseDouble(capacityField.getText());
-        usersData[6] = Double.parseDouble(meltingTemperatureField.getText());
-        usersData[7] = Double.parseDouble(speedCoverField.getText());
-        usersData[8] = Double.parseDouble(coverTemperatureField.getText());
-        usersData[9] = Double.parseDouble(viscosityFactorField.getText());
-        usersData[10] = Double.parseDouble(reductionTemperatureField.getText());
-        usersData[11] = Double.parseDouble(indexOfMaterialField.getText());
-        usersData[12] = Double.parseDouble(emissionFactorField.getText());
-        usersData[13] = Double.parseDouble(consFactorWithReductionField.getText());
+//        usersData[0] = Double.parseDouble(stepField.getText());
+//        usersData[1] = Double.parseDouble(widthField.getText());
+//        usersData[2] = Double.parseDouble(lengthField.getText());
+//        usersData[3] = Double.parseDouble(depthField.getText());
+//        usersData[4] = Double.parseDouble(densityField.getText());
+//        usersData[5] = Double.parseDouble(capacityField.getText());
+//        usersData[6] = Double.parseDouble(meltingTemperatureField.getText());
+//        usersData[7] = Double.parseDouble(speedCoverField.getText());
+//        usersData[8] = Double.parseDouble(coverTemperatureField.getText());
+//        usersData[9] = Double.parseDouble(viscosityFactorField.getText());
+//        usersData[10] = Double.parseDouble(reductionTemperatureField.getText());
+//        usersData[11] = Double.parseDouble(indexOfMaterialField.getText());
+//        usersData[12] = Double.parseDouble(emissionFactorField.getText());
+//        usersData[13] = Double.parseDouble(consFactorWithReductionField.getText());
 
 
-//        double usersData[] = new double[fields.length];
-//        for (int i = 0; i < usersData.length; i++) {
-//            usersData[i] =  Double.parseDouble(fields[i].getText());
-//            System.out.println(Double.parseDouble(fields[i].getText()));
-//
-//        }
+        //double usersData[] = new double[fields.size()];
+        for (int i = 0; i < usersData.length; i++) {
+            usersData[i] = Double.parseDouble(fields.get(i).getText());
+            System.out.println(usersData[i]);
+
+        }
 
 
         Data dt = new Data(usersData);
@@ -254,6 +283,16 @@ public class ModelOverviewController {
         timeCalculate.setText("Время расчета: " + totalTime + "мс");
         report.setValues(dt.getValues());
         report.setListOfResults(results);
+//        createDefenceFromStupid(widthField);
+//        createDefenceFromStupid(lengthField);
+//        createDefenceFromStupid(depthField);
+//        createDefenceFromStupid(densityField);
+//        createDefenceFromStupid(capacityField);
+//        createDefenceFromStupid(meltingTemperatureField);
+//        createDefenceFromStupid(speedCoverField);
+
+
+
 
 
         yAxis2.setUpperBound(Math.rint(results.get(0).getViscosity() * 1.03));
