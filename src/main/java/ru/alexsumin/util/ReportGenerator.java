@@ -50,42 +50,67 @@ public class ReportGenerator {
 
 
             XWPFParagraph bodyParagraph = docxModel.createParagraph();
-            bodyParagraph.setAlignment(ParagraphAlignment.BOTH);
+            bodyParagraph.setAlignment(ParagraphAlignment.CENTER);
             XWPFRun paragraphConfig = bodyParagraph.createRun();
-            paragraphConfig.setItalic(true);
+            paragraphConfig.setItalic(false);
             paragraphConfig.setFontSize(14);
             paragraphConfig.setColor("000000");
-            paragraphConfig.setText("Отчёт об исследовании.\r");
+            paragraphConfig.setFontSize(14);
+            paragraphConfig.setFontFamily("Arial");
+            paragraphConfig.setText("Отчёт об исследовании.");
+            paragraphConfig.addBreak();
 
             XWPFParagraph bodyParagraph2 = docxModel.createParagraph();
-            bodyParagraph2.setAlignment(ParagraphAlignment.BOTH);
+            bodyParagraph2.setAlignment(ParagraphAlignment.LEFT);
             XWPFRun paragraphConfig2 = bodyParagraph.createRun();
             paragraphConfig2.setItalic(true);
             paragraphConfig2.setFontSize(14);
             paragraphConfig2.setFontFamily("Arial");
-            paragraphConfig2.setText(
-                    "Входные данные.\r" +
-                            "Тип материала : Полипропилен.\n" +
-                            "1. Геометрические параметры канала.\n" +
-                            "\t1.1 Ширина, м. W = " + values.get(0) + "\n" +
-                            "\t1.2 Длина, м. L =" + values.get(1) + "\n" +
-                            "\t1.3 Глубина, м. H = " + values.get(2) + "\n" +
-                            "2. Параметры свойств материала." + "\n" +
-                            "\t2.1 Плотность, кг/м^3. ρ = " + values.get(3) + "\n" +
-                            "\t2.2 Удельная теплоёмкость, Дж/(кг*°C). c =" + values.get(4) + "\n" +
-                            "\t2.3 Температура плавления, °C. T0 =" + values.get(5) + "\n" +
-                            "3. Режимные параметры." + "\n" +
-                            "\t3.1 Скорость движения крышки, м/с. Vu = " + values.get(6) + "\n" +
-                            "\t3.2 Температура крышки, °C. Tu =" + values.get(7) + "\n" +
-                            "4. Эмпирические коэффициенты математической модели." + "\n" +
-                            "\t4.1 Коэффициент консистенции материала, Па*с^n. µ0 = " + values.get(8) + "\n" +
-                            "\t4.2 Температурный коэффициент вязкости, 1/°C. b = " + values.get(9) + "\n" +
-                            "\t4.3 Температура приведения, °C. Tr = " + values.get(10) + "\n" +
-                            "\t4.4 Индекс течения материала, -. n = " + values.get(11) + "\n" +
-                            "\t4.5 Коэффициент теплоотдачи от крышки канала к материалу, Вт/(м^2*°C). αu = " + values.get(12) + "\n" +
-                            "Температура продукта = " + values.get(13) + "\n" +
-                            "Вязкость продукта =" + values.get(14) + "\n" +
-                            "Производительность канала" + values.get(15) + "\n");
+            paragraphConfig2.setText("Входные данные.");
+            paragraphConfig2.addBreak();
+            //paragraphConfig2.addTab();
+            paragraphConfig2.setText("Тип материала : Полипропилен.");
+            paragraphConfig2.addBreak();
+            paragraphConfig2.setText("1. Геометрические параметры канала.");
+            paragraphConfig2.addBreak();
+            paragraphConfig2.setText("\t1.1 Ширина, м. W = " + values.get(0));
+            paragraphConfig2.addBreak();
+            paragraphConfig2.setText("\t1.2 Длина, м. L =" + values.get(1));
+            paragraphConfig2.addBreak();
+            paragraphConfig2.setText("\t1.3 Глубина, м. H = " + values.get(2));
+            paragraphConfig2.addBreak();
+            paragraphConfig2.setText("2. Параметры свойств материала.");
+            paragraphConfig2.addBreak();
+            paragraphConfig2.setText("\t2.1 Плотность, кг/м^3. ρ = " + values.get(3));
+            paragraphConfig2.addBreak();
+            paragraphConfig2.setText("\t2.2 Удельная теплоёмкость, Дж/(кг*°C). c =" + values.get(4));
+            paragraphConfig2.addBreak();
+            paragraphConfig2.setText("\t2.3 Температура плавления, °C. T0 =" + values.get(5));
+            paragraphConfig2.addBreak();
+            paragraphConfig2.setText("3. Режимные параметры.");
+            paragraphConfig2.addBreak();
+            paragraphConfig2.setText("\t3.1 Скорость движения крышки, м/с. Vu = " + values.get(6));
+            paragraphConfig2.addBreak();
+            paragraphConfig2.setText("\t3.2 Температура крышки, °C. Tu =" + values.get(7));
+            paragraphConfig2.addBreak();
+            paragraphConfig2.setText("4. Эмпирические коэффициенты математической модели.");
+            paragraphConfig2.addBreak();
+            paragraphConfig2.setText("\t4.1 Коэффициент консистенции материала, Па*с^n. µ0 = " + values.get(8));
+            paragraphConfig2.addBreak();
+            paragraphConfig2.setText("\t4.2 Температурный коэффициент вязкости, 1/°C. b = " + values.get(9));
+            paragraphConfig2.addBreak();
+            paragraphConfig2.setText("\t4.3 Температура приведения, °C. Tr = " + values.get(10));
+            paragraphConfig2.addBreak();
+            paragraphConfig2.setText("\t4.4 Индекс течения материала, -. n = " + values.get(11));
+            paragraphConfig2.addBreak();
+            paragraphConfig2.setText("\t4.5 Коэффициент теплоотдачи от крышки канала к материалу, Вт/(м^2*°C). αu = " + values.get(12));
+            paragraphConfig2.addBreak();
+            paragraphConfig2.setText("Температура продукта = " + values.get(13));
+            paragraphConfig2.addBreak();
+            paragraphConfig2.setText("Вязкость продукта =" + values.get(14));
+            paragraphConfig2.addBreak();
+            paragraphConfig2.setText("Производительность канала" + values.get(15));
+            paragraphConfig2.addBreak();
 
             //create table
             XWPFTable table = docxModel.createTable();
