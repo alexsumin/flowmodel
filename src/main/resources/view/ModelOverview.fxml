@@ -129,38 +129,37 @@
                                                                                                 maxWidth="360.0"
                                                                                                 minWidth="10.0"
                                                                                                 prefWidth="259.0"/>
-                                                                                        <ColumnConstraints
-                                                                                                hgrow="SOMETIMES"
-                                                                                                maxWidth="360.0"
-                                                                                                minWidth="10.0"
-                                                                                                prefWidth="113.0"/>
                                                                                     </columnConstraints>
                                                                                     <rowConstraints>
                                                                                         <RowConstraints
                                                                                                 fillHeight="false"
+                                                                                                maxHeight="53.0"
                                                                                                 minHeight="10.0"
-                                                                                                prefHeight="42.0"
+                                                                                                prefHeight="53.0"
                                                                                                 vgrow="SOMETIMES"/>
-                                                                                        <RowConstraints minHeight="10.0"
-                                                                                                        prefHeight="17.0"
-                                                                                                        vgrow="SOMETIMES"/>
-                                                                                        <RowConstraints maxHeight="30.0"
+                                                                                        <RowConstraints maxHeight="56.0"
                                                                                                         minHeight="10.0"
-                                                                                                        prefHeight="30.0"
+                                                                                                        prefHeight="39.0"
                                                                                                         vgrow="SOMETIMES"/>
-                                                                                        <RowConstraints minHeight="10.0"
-                                                                                                        prefHeight="44.0"
-                                                                                                        vgrow="SOMETIMES"/>
-                                                                                        <RowConstraints maxHeight="30.0"
+                                                                                        <RowConstraints maxHeight="34.0"
                                                                                                         minHeight="10.0"
-                                                                                                        prefHeight="30.0"
+                                                                                                        prefHeight="27.0"
                                                                                                         vgrow="SOMETIMES"/>
-                                                                                        <RowConstraints minHeight="10.0"
-                                                                                                        prefHeight="30.0"
-                                                                                                        vgrow="SOMETIMES"/>
-                                                                                        <RowConstraints maxHeight="30.0"
+                                                                                        <RowConstraints maxHeight="52.0"
                                                                                                         minHeight="10.0"
-                                                                                                        prefHeight="30.0"
+                                                                                                        prefHeight="42.0"
+                                                                                                        vgrow="SOMETIMES"/>
+                                                                                        <RowConstraints maxHeight="52.0"
+                                                                                                        minHeight="10.0"
+                                                                                                        prefHeight="28.0"
+                                                                                                        vgrow="SOMETIMES"/>
+                                                                                        <RowConstraints maxHeight="80.0"
+                                                                                                        minHeight="10.0"
+                                                                                                        prefHeight="43.0"
+                                                                                                        vgrow="SOMETIMES"/>
+                                                                                        <RowConstraints maxHeight="60.0"
+                                                                                                        minHeight="0.0"
+                                                                                                        prefHeight="31.0"
                                                                                                         vgrow="SOMETIMES"/>
                                                                                     </rowConstraints>
                                                                                     <children>
@@ -188,8 +187,9 @@
                                                                                                 GridPane.rowIndex="6"/>
                                                                                     </children>
                                                                                     <padding>
-                                                                                        <Insets bottom="10.0"
-                                                                                                left="10.0" right="10.0"
+                                                                                        <Insets bottom="25.0"
+                                                                                                left="10.0"
+                                                                                                right="120.0"
                                                                                                 top="10.0"/>
                                                                                     </padding>
                                                                                 </GridPane>
@@ -212,9 +212,7 @@
                                                                                                 vgrow="SOMETIMES"/>
                                                                                     </rowConstraints>
                                                                                     <children>
-                                                                                        <Label prefHeight="40.0"
-                                                                                               prefWidth="406.0"
-                                                                                               text="Эмпирические коэффициенты &#10;математической модели:">
+                                                                                        <Label text="Эмпирические коэффициенты математической модели:">
                                                                                             <font>
                                                                                                 <Font name="System Bold"
                                                                                                       size="13.0"/>
@@ -270,7 +268,7 @@
                                                                                                         text="11000"
                                                                                                         GridPane.rowIndex="1">
                                                                                                     <GridPane.margin>
-                                                                                                        <Insets right="10.0"/>
+                                                                                                        <Insets right="17.0"/>
                                                                                                     </GridPane.margin>
                                                                                                 </TextField>
                                                                                                 <Label text="Температурный &#10;коэффициент вязкости, 1/°С"
@@ -280,7 +278,7 @@
                                                                                                         text="0.018"
                                                                                                         GridPane.rowIndex="3">
                                                                                                     <GridPane.margin>
-                                                                                                        <Insets right="10.0"/>
+                                                                                                        <Insets right="17.0"/>
                                                                                                     </GridPane.margin>
                                                                                                 </TextField>
                                                                                                 <Label text="Температура приведения, °С"
@@ -290,32 +288,40 @@
                                                                                                         text="200"
                                                                                                         GridPane.rowIndex="5">
                                                                                                     <GridPane.margin>
-                                                                                                        <Insets right="10.0"/>
+                                                                                                        <Insets right="17.0"/>
                                                                                                     </GridPane.margin>
                                                                                                 </TextField>
                                                                                                 <Label text="Индекс течения материала"
-                                                                                                       GridPane.columnIndex="1"/>
+                                                                                                       GridPane.columnIndex="1">
+                                                                                                    <GridPane.margin>
+                                                                                                        <Insets left="5.0"/>
+                                                                                                    </GridPane.margin>
+                                                                                                </Label>
                                                                                                 <TextField
                                                                                                         fx:id="indexOfMaterialField"
                                                                                                         text="0.35"
                                                                                                         GridPane.columnIndex="1"
                                                                                                         GridPane.rowIndex="1">
                                                                                                     <GridPane.margin>
-                                                                                                        <Insets left="3.0"/>
+                                                                                                        <Insets left="5.0"/>
                                                                                                     </GridPane.margin>
                                                                                                 </TextField>
                                                                                                 <Label prefHeight="50.0"
                                                                                                        prefWidth="211.0"
                                                                                                        text="Коэффициент теплоотдачи &#10;от крышки канала &#10;к материалу, Вт/(м²∙°C)"
                                                                                                        GridPane.columnIndex="1"
-                                                                                                       GridPane.rowIndex="2"/>
+                                                                                                       GridPane.rowIndex="2">
+                                                                                                    <GridPane.margin>
+                                                                                                        <Insets left="5.0"/>
+                                                                                                    </GridPane.margin>
+                                                                                                </Label>
                                                                                                 <TextField
                                                                                                         fx:id="emissionFactorField"
                                                                                                         text="500"
                                                                                                         GridPane.columnIndex="1"
                                                                                                         GridPane.rowIndex="3">
                                                                                                     <GridPane.margin>
-                                                                                                        <Insets left="3.0"/>
+                                                                                                        <Insets left="5.0"/>
                                                                                                     </GridPane.margin>
                                                                                                 </TextField>
                                                                                             </children>
@@ -407,8 +413,6 @@
                                                                                                        GridPane.rowIndex="5"/>
                                                                                                 <TextField
                                                                                                         fx:id="widthField"
-                                                                                                        prefHeight="26.0"
-                                                                                                        prefWidth="245.0"
                                                                                                         text="0.27"
                                                                                                         GridPane.rowIndex="2"/>
                                                                                                 <TextField
@@ -512,60 +516,81 @@
                                                                                                 hgrow="SOMETIMES"
                                                                                                 maxWidth="271.0"
                                                                                                 minWidth="10.0"
-                                                                                                prefWidth="263.0"/>
+                                                                                                prefWidth="161.0"/>
                                                                                         <ColumnConstraints
                                                                                                 hgrow="SOMETIMES"
                                                                                                 maxWidth="190.0"
                                                                                                 minWidth="10.0"
-                                                                                                prefWidth="124.0"/>
+                                                                                                prefWidth="101.0"/>
                                                                                     </columnConstraints>
                                                                                     <rowConstraints>
-                                                                                        <RowConstraints minHeight="30.0"
-                                                                                                        prefHeight="40.0"
+                                                                                        <RowConstraints maxHeight="50.0"
+                                                                                                        minHeight="27.0"
+                                                                                                        prefHeight="41.0"
                                                                                                         vgrow="SOMETIMES"/>
-                                                                                        <RowConstraints minHeight="10.0"
+                                                                                        <RowConstraints maxHeight="92.0"
+                                                                                                        minHeight="10.0"
+                                                                                                        prefHeight="44.0"
+                                                                                                        vgrow="SOMETIMES"/>
+                                                                                        <RowConstraints maxHeight="96.0"
+                                                                                                        minHeight="10.0"
                                                                                                         prefHeight="30.0"
                                                                                                         vgrow="SOMETIMES"/>
-                                                                                        <RowConstraints minHeight="10.0"
-                                                                                                        prefHeight="30.0"
+                                                                                        <RowConstraints maxHeight="92.0"
+                                                                                                        minHeight="10.0"
+                                                                                                        prefHeight="29.0"
                                                                                                         vgrow="SOMETIMES"/>
-                                                                                        <RowConstraints minHeight="10.0"
-                                                                                                        prefHeight="30.0"
+                                                                                        <RowConstraints maxHeight="94.0"
+                                                                                                        minHeight="10.0"
+                                                                                                        prefHeight="57.0"
                                                                                                         vgrow="SOMETIMES"/>
-                                                                                        <RowConstraints minHeight="10.0"
-                                                                                                        prefHeight="30.0"
+                                                                                        <RowConstraints maxHeight="52.0"
+                                                                                                        minHeight="10.0"
+                                                                                                        prefHeight="42.0"
                                                                                                         vgrow="SOMETIMES"/>
-                                                                                        <RowConstraints minHeight="10.0"
-                                                                                                        prefHeight="30.0"
-                                                                                                        vgrow="SOMETIMES"/>
-                                                                                        <RowConstraints minHeight="10.0"
-                                                                                                        prefHeight="30.0"
+                                                                                        <RowConstraints maxHeight="39.0"
+                                                                                                        minHeight="10.0"
+                                                                                                        prefHeight="33.0"
                                                                                                         vgrow="SOMETIMES"/>
                                                                                     </rowConstraints>
                                                                                     <children>
-                                                                                        <Label text="Выходные параметры:">
+                                                                                        <Label text="Варьируемый параметр:">
                                                                                             <font>
                                                                                                 <Font name="System Bold"
                                                                                                       size="13.0"/>
                                                                                             </font>
                                                                                         </Label>
-                                                                                        <Label text="Производительность, кг/ч"
+                                                                                        <Label text="Шаг по длине канала, м:"
                                                                                                GridPane.rowIndex="1"/>
-                                                                                        <TextField fx:id="performField"
-                                                                                                   GridPane.rowIndex="2"/>
-                                                                                        <Label text="Температура продукта, °С"
-                                                                                               GridPane.rowIndex="3"/>
-                                                                                        <TextField
-                                                                                                fx:id="lastTemperField"
-                                                                                                GridPane.rowIndex="4"/>
-                                                                                        <Label text="Вязкость продукта, Па∙с"
-                                                                                               GridPane.rowIndex="5"/>
-                                                                                        <TextField fx:id="lastViscField"
-                                                                                                   GridPane.rowIndex="6"/>
+                                                                                        <TextField fx:id="stepField"
+                                                                                                   prefWidth="146.0"
+                                                                                                   text="0.1"
+                                                                                                   GridPane.rowIndex="2">
+                                                                                            <GridPane.margin>
+                                                                                                <Insets right="15.0"/>
+                                                                                            </GridPane.margin>
+                                                                                        </TextField>
+                                                                                        <Button fx:id="calculateButton"
+                                                                                                mnemonicParsing="false"
+                                                                                                onAction="#calculate"
+                                                                                                prefHeight="25.0"
+                                                                                                prefWidth="104.0"
+                                                                                                text="Расчет"
+                                                                                                GridPane.columnIndex="1"
+                                                                                                GridPane.rowIndex="2"/>
+                                                                                        <Button fx:id="reportButton"
+                                                                                                mnemonicParsing="false"
+                                                                                                onAction="#generateReport"
+                                                                                                prefHeight="25.0"
+                                                                                                prefWidth="104.0"
+                                                                                                text="Отчет"
+                                                                                                GridPane.columnIndex="1"
+                                                                                                GridPane.rowIndex="3"/>
                                                                                     </children>
                                                                                     <padding>
                                                                                         <Insets bottom="10.0"
-                                                                                                left="10.0" right="10.0"
+                                                                                                left="10.0"
+                                                                                                right="120.0"
                                                                                                 top="10.0"/>
                                                                                     </padding>
                                                                                 </GridPane>
@@ -573,34 +598,84 @@
                                                                         </GridPane>
                                                                     </children>
                                                                 </AnchorPane>
-                                                                <AnchorPane minHeight="0.0" minWidth="0.0"
-                                                                            prefHeight="176.0" prefWidth="867.0">
+                                                                <GridPane>
+                                                                    <columnConstraints>
+                                                                        <ColumnConstraints hgrow="SOMETIMES"
+                                                                                           maxWidth="651.0"
+                                                                                           minWidth="10.0"
+                                                                                           prefWidth="234.0"/>
+                                                                        <ColumnConstraints hgrow="SOMETIMES"
+                                                                                           maxWidth="451.0"
+                                                                                           minWidth="0.0"
+                                                                                           prefWidth="242.0"/>
+                                                                        <ColumnConstraints hgrow="SOMETIMES"
+                                                                                           maxWidth="392.0"
+                                                                                           minWidth="0.0"
+                                                                                           prefWidth="263.0"/>
+                                                                    </columnConstraints>
+                                                                    <rowConstraints>
+                                                                        <RowConstraints maxHeight="30.0"
+                                                                                        minHeight="26.0"
+                                                                                        prefHeight="26.0"
+                                                                                        vgrow="SOMETIMES"/>
+                                                                        <RowConstraints maxHeight="34.0"
+                                                                                        minHeight="10.0"
+                                                                                        prefHeight="34.0"
+                                                                                        vgrow="SOMETIMES"/>
+                                                                        <RowConstraints maxHeight="37.0"
+                                                                                        minHeight="10.0"
+                                                                                        prefHeight="32.0"
+                                                                                        vgrow="SOMETIMES"/>
+                                                                        <RowConstraints maxHeight="25.0" minHeight="6.0"
+                                                                                        prefHeight="8.0"
+                                                                                        vgrow="SOMETIMES"/>
+                                                                        <RowConstraints minHeight="10.0"
+                                                                                        prefHeight="30.0"
+                                                                                        vgrow="SOMETIMES"/>
+                                                                    </rowConstraints>
                                                                     <children>
-                                                                        <ButtonBar layoutX="484.0" layoutY="44.0"
-                                                                                   prefHeight="40.0" prefWidth="348.0">
-                                                                            <buttons>
-                                                                                <Label minWidth="15.0" prefHeight="37.0"
-                                                                                       text="Шаг по длине&#10;канала, м:"/>
-                                                                                <TextField fx:id="stepField"
-                                                                                           minWidth="30.0"
-                                                                                           prefHeight="30.0"
-                                                                                           text="0.1"/>
-                                                                                <Button fx:id="calculateButton"
-                                                                                        mnemonicParsing="false"
-                                                                                        onAction="#calculate"
-                                                                                        text="Расчет"/>
-                                                                            </buttons>
-                                                                        </ButtonBar>
-                                                                        <Label fx:id="timeCalculate" layoutX="43.0"
-                                                                               layoutY="56.0" prefHeight="16.0"
-                                                                               prefWidth="190.0" text="Время расчета:"/>
-                                                                        <Button fx:id="reportButton" layoutX="730.0"
-                                                                                layoutY="84.0" mnemonicParsing="false"
-                                                                                onAction="#generateReport"
-                                                                                prefHeight="26.0" prefWidth="104.0"
-                                                                                text="Отчет"/>
+                                                                        <Label text="Выходные параметры:">
+                                                                            <font>
+                                                                                <Font name="System Bold" size="13.0"/>
+                                                                            </font>
+                                                                        </Label>
+                                                                        <Label text="Производительность, кг/ч"
+                                                                               GridPane.rowIndex="1"/>
+                                                                        <Label text="Температура продукта, °С"
+                                                                               GridPane.columnIndex="1"
+                                                                               GridPane.rowIndex="1"/>
+                                                                        <Label text="Вязкость продукта, Па∙с"
+                                                                               GridPane.columnIndex="2"
+                                                                               GridPane.rowIndex="1"/>
+                                                                        <TextField fx:id="performField"
+                                                                                   GridPane.rowIndex="2">
+                                                                            <GridPane.margin>
+                                                                                <Insets right="22.0"/>
+                                                                            </GridPane.margin>
+                                                                        </TextField>
+                                                                        <TextField fx:id="lastTemperField"
+                                                                                   GridPane.columnIndex="1"
+                                                                                   GridPane.rowIndex="2">
+                                                                            <GridPane.margin>
+                                                                                <Insets right="19.0"/>
+                                                                            </GridPane.margin>
+                                                                        </TextField>
+                                                                        <TextField fx:id="lastViscField"
+                                                                                   GridPane.columnIndex="2"
+                                                                                   GridPane.rowIndex="2">
+                                                                            <GridPane.margin>
+                                                                                <Insets/>
+                                                                            </GridPane.margin>
+                                                                        </TextField>
+                                                                        <Label fx:id="timeCalculate" prefHeight="16.0"
+                                                                               prefWidth="190.0" text="Время расчета:"
+                                                                               GridPane.rowIndex="4"/>
                                                                     </children>
-                                                                </AnchorPane>
+                                                                    <padding>
+                                                                        <Insets bottom="10.0" left="10.0" right="120.0"
+                                                                                top="10.0"/>
+                                                                    </padding>
+                                                                </GridPane>
                                                             </items>
                                                         </SplitPane>
                                                     </children>

@@ -334,24 +334,36 @@ public class ModelOverviewController {
 
     @FXML
     public void generateReport(final ActionEvent event) {
-        if (isCalculated) {
 
-            report.setValues(dt.getValues());
-            report.setListOfResults(results);
-            report.create();
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Отчёт");
-            alert.setHeaderText("Отчёт успешно сохранён.");
-            alert.showAndWait();
-        } else {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Ошибка");
-            alert.setHeaderText("Сперва необходимо произвести расчёт!");
-            alert.showAndWait();
-            return;
+        File file = fileChooser.showSaveDialog(null);
+
+        if (file == null) return;
+
+        WritableImage image = viscosityChart.snapshot(new SnapshotParameters(), null);
+
+        try {
+            ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", file);
+        } catch (IOException ex) {
+
+
+            if (isCalculated) {
+
+                report.setValues(dt.getValues());
+                report.setListOfResults(results);
+                report.create();
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Отчёт");
+                alert.setHeaderText("Отчёт успешно сохранён.");
+                alert.showAndWait();
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Ошибка");
+                alert.setHeaderText("Сперва необходимо произвести расчёт!");
+                alert.showAndWait();
+                return;
+            }
+
         }
-
-    }
 
     @FXML
     private void saveTemperImage(ActionEvent event) {
