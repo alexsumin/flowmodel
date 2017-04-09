@@ -153,7 +153,7 @@ public class Data {
         values.add(meltingTemperature);
         values.add(coverSpeed);
         values.add(coverTemperature);
-        values.add(consistenceFactor);
+        values.add(consFactorWithReduction);
         values.add(viscosityFactor);
         values.add(reductionTemperature);
         values.add(flowIndex);

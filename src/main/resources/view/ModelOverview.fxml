@@ -828,7 +828,6 @@
             <fx:reference source="reductionTemperatureField"/>
             <fx:reference source="indexOfMaterialField"/>
             <fx:reference source="emissionFactorField"/>
-            <fx:reference source="emissionFactorField"/>
             <fx:reference source="consFactorWithReductionField"/>
         </ArrayList>
     </fx:define>

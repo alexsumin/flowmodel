@@ -155,10 +155,10 @@ public class ModelOverviewController {
 
         //initContextMenuChart();
 
-        for (TextField tf :
-                fields) {
-            createDefenceFromStupid(tf);
-        }
+//        for (TextField tf :
+//                fields) {
+//            createDefenceFromStupid(tf);
+//        }
         createDefenceFromStupid(stepField, Double.parseDouble(lengthField.getText()));
         timeCalculate.setVisible(false);
 
