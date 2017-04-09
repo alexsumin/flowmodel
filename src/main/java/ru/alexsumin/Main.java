@@ -18,6 +18,7 @@ public class Main extends Application {
 
     private final String USER_LOGIN = "admin",
             USER_PASSWORD = "password";
+    private boolean isAdmin;
 
     public static void main(String[] args) throws Exception {
 
@@ -84,6 +85,8 @@ public class Main extends Application {
         dialog.setResultConverter(dialogButton -> {
             if (dialogButton == loginButtonType) {
                 return new LoginData(username.getText(), password.getText());
+            } else {
+                System.exit(0);
             }
             return null;
         });

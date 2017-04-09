@@ -13,6 +13,7 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseButton;
@@ -21,6 +22,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
+import javafx.util.converter.DoubleStringConverter;
+import javafx.util.converter.NumberStringConverter;
 import ru.alexsumin.Main;
 import ru.alexsumin.model.Data;
 import ru.alexsumin.model.Result;
@@ -29,7 +32,9 @@ import ru.alexsumin.util.ReportGenerator;
 import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.text.ParsePosition;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -66,6 +71,7 @@ public class ModelOverviewController {
     };
     @FXML
     Label lbl;
+    Data dt;
     private ObservableList<Result> results = FXCollections.observableArrayList();
     @FXML
     private LineChart<Number, Number> viscosityChart;
@@ -78,7 +84,9 @@ public class ModelOverviewController {
     @FXML
     private TableColumn<Result, Number> viscosityColumn;
     @FXML
-    private TextField stepField, widthField, lengthField, depthField;
+    private TextField stepField;
+    @FXML
+    private TextField widthField, lengthField, depthField;
     @FXML
     private TextField densityField, capacityField, meltingTemperatureField;
     @FXML
@@ -88,13 +96,7 @@ public class ModelOverviewController {
     @FXML
     private TextField performField, lastTemperField, lastViscField;
     @FXML
-    private ArrayList<TextField> fields; //= {stepField, widthField, lengthField, depthField, densityField, capacityField, meltingTemperatureField,
-//            reductionTemperatureField, indexOfMaterialField, emissionFactorField, consFactorWithReductionField,
-//            performField, lastTemperField, lastViscField};
-
-    //    private TextField[] fields = {stepField, widthField, lengthField, depthField, densityField, capacityField, meltingTemperatureField,
-//            reductionTemperatureField, indexOfMaterialField, emissionFactorField, consFactorWithReductionField,
-//            performField, lastTemperField, lastViscField};
+    private ArrayList<TextField> fields;
     @FXML
     private Button runChartTemp, clearTempChart, clearViscChart, runChartViscos;
     @FXML
@@ -114,51 +116,43 @@ public class ModelOverviewController {
     private NumberAxis xAis1, xAxis2;
     @FXML
     private NumberAxis yAxis1, yAxis2;
+    private boolean isCalculated;
 
     public ModelOverviewController() {
     }
 
-    private void initContextMenuTable() {
 
-        MenuItem add_row = new MenuItem("Добавить строку");
-        MenuItem remove_row = new MenuItem("Удалить строку");
-        MenuItem clear_table = new MenuItem("Очистить таблицу");
-
-        table_context_menu = new ContextMenu(add_row, remove_row, clear_table);
-
-        add_row.setOnAction(e -> {
-            results.add(new Result(0, 0, 0));
-        });
-
-        clear_table.setOnAction(e -> {
-            results.clear();
-        });
-
-        remove_row.setOnAction(e -> {
-            results.remove(tableWithResult.getSelectionModel().getSelectedIndex());
-        });
-
+    @FXML
+    public void openMenu(final MouseEvent event) {
+        if (event.getButton() != MouseButton.SECONDARY) return;
+        chart_context_menu.show(vbox.getScene().getWindow(), event.getScreenX(), event.getScreenY());
     }
+
 
     @FXML
     private void initialize() {
-//        fields = new TextField[]{widthField, lengthField, depthField, densityField, capacityField, meltingTemperatureField,
-//           reductionTemperatureField, indexOfMaterialField, emissionFactorField, consFactorWithReductionField,
-//            performField, lastTemperField, lastViscField};
+
+
+        FileChooser.ExtensionFilter filter1 = new FileChooser.ExtensionFilter("Документы Microsoft Office Word", "*.docx");
+        FileChooser.ExtensionFilter filter3 = new FileChooser.ExtensionFilter("Файлы PNG", "*.png");
+        FileChooser.ExtensionFilter filter2 = new FileChooser.ExtensionFilter("Все файлы", "*.*");
+        fileChooser.getExtensionFilters().addAll(filter1, filter2, filter3);
+
 
         initColumn();
+
 
         tableWithResult.setEditable(true);
         tableWithResult.setItems(results);
 
-        initContextMenuTable();
 
-        //initContextMenuChart();
+        initContextMenuChart();
 
-//        for (TextField tf :
-//                fields) {
-//            createDefenceFromStupid(tf);
-//        }
+        for (TextField tf :
+                fields) {
+            createDefenceFromStupid(tf);
+        }
+
         createDefenceFromStupid(stepField, Double.parseDouble(lengthField.getText()));
         timeCalculate.setVisible(false);
 
@@ -173,11 +167,12 @@ public class ModelOverviewController {
 
     }
 
+
     private void createDefenceFromStupid(TextField textField, double maxValue) {
         textField.setTextFormatter(new TextFormatter<>(filter));
         textField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.isEmpty() || (newValue.equals("0.0")) || (newValue.equals("0")) || (newValue.equals("0."))
-                    || (Double.parseDouble(newValue) > maxValue)) {
+                    || (newValue.equals(".0")) || (Double.parseDouble(newValue) > maxValue)) {
                 textField.setText(oldValue);
             } else {
                 try {
@@ -190,6 +185,7 @@ public class ModelOverviewController {
             }
         });
     }
+
 
     private void createDefenceFromStupid(TextField textField) {
         textField.setTextFormatter(new TextFormatter<>(filter));
@@ -245,26 +241,8 @@ public class ModelOverviewController {
     public void calculate(final ActionEvent event) {
         long startTime = System.currentTimeMillis();
 
-        double usersData[] = new double[14];
-        //TODO: переделать с использование  цикла
-        //в цикле выкидывает nullPointerException, мб textfield не имплементирует iterable?
-//        usersData[0] = Double.parseDouble(stepField.getText());
-//        usersData[1] = Double.parseDouble(widthField.getText());
-//        usersData[2] = Double.parseDouble(lengthField.getText());
-//        usersData[3] = Double.parseDouble(depthField.getText());
-//        usersData[4] = Double.parseDouble(densityField.getText());
-//        usersData[5] = Double.parseDouble(capacityField.getText());
-//        usersData[6] = Double.parseDouble(meltingTemperatureField.getText());
-//        usersData[7] = Double.parseDouble(speedCoverField.getText());
-//        usersData[8] = Double.parseDouble(coverTemperatureField.getText());
-//        usersData[9] = Double.parseDouble(viscosityFactorField.getText());
-//        usersData[10] = Double.parseDouble(reductionTemperatureField.getText());
-//        usersData[11] = Double.parseDouble(indexOfMaterialField.getText());
-//        usersData[12] = Double.parseDouble(emissionFactorField.getText());
-//        usersData[13] = Double.parseDouble(consFactorWithReductionField.getText());
+        double usersData[] = new double[fields.size()];
 
-
-        //double usersData[] = new double[fields.size()];
         for (int i = 0; i < usersData.length; i++) {
             usersData[i] = Double.parseDouble(fields.get(i).getText());
             System.out.println(usersData[i]);
@@ -272,7 +250,7 @@ public class ModelOverviewController {
         }
 
 
-        Data dt = new Data(usersData);
+        dt = new Data(usersData);
         results = FXCollections.observableArrayList(dt.getResults());
         tableWithResult.setItems(results);
         performField.setText(String.valueOf((int) dt.getCanalPerformance()));
@@ -281,19 +259,13 @@ public class ModelOverviewController {
         timeCalculate.setVisible(true);
         long totalTime = System.currentTimeMillis() - startTime;
         timeCalculate.setText("Время расчета: " + totalTime + "мс");
-        report.setValues(dt.getValues());
-        report.setListOfResults(results);
-//        createDefenceFromStupid(widthField);
-//        createDefenceFromStupid(lengthField);
-//        createDefenceFromStupid(depthField);
-//        createDefenceFromStupid(densityField);
-//        createDefenceFromStupid(capacityField);
-//        createDefenceFromStupid(meltingTemperatureField);
-//        createDefenceFromStupid(speedCoverField);
+        isCalculated = true;
 
 
-
-
+        tempChart.getData().clear();
+        viscosityChart.getData().clear();
+        drawTemperatureChart();
+        drawViscosityChart();
 
         yAxis2.setUpperBound(Math.rint(results.get(0).getViscosity() * 1.03));
         yAxis2.setLowerBound(Math.rint(results.get(results.size() - 1).getViscosity() * 0.97));
@@ -314,9 +286,8 @@ public class ModelOverviewController {
         lineChart.setLegendVisible(false);
 
         for (XYChart.Data<Double, Double> s : series.getData()) {
-            s.getNode().addEventHandler(MouseEvent.MOUSE_MOVED, event -> {
-                lbl.setText("" + s.getXValue() + " " + s.getYValue());
-                Tooltip tooltip = new Tooltip("" + s.getXValue() + " " + s.getYValue());
+            s.getNode().addEventHandler(MouseEvent.MOUSE_ENTERED, event -> {
+                Tooltip tooltip = new Tooltip("x: " + s.getXValue() + "\ny: " + s.getYValue());
 
                 Tooltip.install(s.getNode(), tooltip);
 
@@ -327,7 +298,7 @@ public class ModelOverviewController {
     }
 
 
-    public void drawTemperatureChart(final ActionEvent e) {
+    public void drawTemperatureChart() {
         int len = results.size();
         XYChart.Data[] resultsTemper = new XYChart.Data[len];
         Result tmp;
@@ -340,7 +311,7 @@ public class ModelOverviewController {
 
     }
 
-    public void drawViscosityChart(final ActionEvent e) {
+    public void drawViscosityChart() {
         int len = results.size();
         XYChart.Data[] resultsTemper = new XYChart.Data[len];
         Result tmp;
@@ -360,15 +331,67 @@ public class ModelOverviewController {
         viscosityChart.getData().clear();
     }
 
-    @FXML
-    public void addRow(final MouseEvent event) {
-        if (event.getButton() != MouseButton.SECONDARY) return;
-        table_context_menu.show(vbox.getScene().getWindow(), event.getScreenX(), event.getScreenY());
-    }
 
     @FXML
     public void generateReport(final ActionEvent event) {
-        report.create();
+        if (isCalculated) {
+
+            report.setValues(dt.getValues());
+            report.setListOfResults(results);
+            report.create();
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Отчёт");
+            alert.setHeaderText("Отчёт успешно сохранён.");
+            alert.showAndWait();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Ошибка");
+            alert.setHeaderText("Сперва необходимо произвести расчёт!");
+            alert.showAndWait();
+            return;
+        }
+
+    }
+
+    @FXML
+    private void saveTemperImage(ActionEvent event) {
+
+        File file = fileChooser.showSaveDialog(null);
+
+        if (file == null) return;
+
+        WritableImage image = tempChart.snapshot(new SnapshotParameters(), null);
+
+        try {
+            ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", file);
+        } catch (IOException ex) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Ошибка");
+            alert.setHeaderText("Не удалось сохранить изображение.");
+            alert.showAndWait();
+            return;
+        }
+
+    }
+
+    @FXML
+    private void saveViscImage(ActionEvent event) {
+
+        File file = fileChooser.showSaveDialog(null);
+
+        if (file == null) return;
+
+        WritableImage image = viscosityChart.snapshot(new SnapshotParameters(), null);
+
+        try {
+            ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", file);
+        } catch (IOException ex) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Ошибка");
+            alert.setHeaderText("Не удалось сохранить изображение.");
+            alert.showAndWait();
+            return;
+        }
 
     }
 

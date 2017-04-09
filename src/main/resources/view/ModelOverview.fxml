@@ -609,8 +609,8 @@
                                                             prefWidth="100.0" SplitPane.resizableWithParent="false">
                                                     <children>
                                                         <TableView fx:id="tableWithResult" layoutX="14.0" layoutY="14.0"
-                                                                   onMouseClicked="#addRow" prefHeight="744.0"
-                                                                   prefWidth="402.0" AnchorPane.bottomAnchor="0.0"
+                                                                   prefHeight="744.0" prefWidth="402.0"
+                                                                   AnchorPane.bottomAnchor="0.0"
                                                                    AnchorPane.leftAnchor="0.0"
                                                                    AnchorPane.rightAnchor="0.0"
                                                                    AnchorPane.topAnchor="0.0">
@@ -653,13 +653,13 @@
                                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
                                             </columnConstraints>
                                             <rowConstraints>
-                                                <RowConstraints maxHeight="581.0" minHeight="10.0" prefHeight="572.0"
+                                                <RowConstraints maxHeight="624.0" minHeight="10.0" prefHeight="615.0"
                                                                 vgrow="SOMETIMES"/>
-                                                <RowConstraints maxHeight="363.0" minHeight="10.0" prefHeight="166.0"
+                                                <RowConstraints maxHeight="363.0" minHeight="10.0" prefHeight="123.0"
                                                                 vgrow="SOMETIMES"/>
                                             </rowConstraints>
                                             <children>
-                                                <LineChart fx:id="tempChart">
+                                                <LineChart fx:id="tempChart" onMouseClicked="#openMenu">
                                                     <xAxis>
                                                         <NumberAxis label="" side="LEFT" fx:id="xAxis1"/>
                                                     </xAxis>
@@ -667,7 +667,8 @@
                                                         <NumberAxis fx:id="yAxis1" label="" side="LEFT"/>
                                                     </yAxis>
                                                 </LineChart>
-                                                <LineChart fx:id="viscosityChart" GridPane.columnIndex="1">
+                                                <LineChart fx:id="viscosityChart" onMouseClicked="#openMenu"
+                                                           GridPane.columnIndex="1">
                                                     <xAxis>
                                                         <NumberAxis label="" side="LEFT" fx:id="xAxis2"/>
                                                     </xAxis>
@@ -695,46 +696,16 @@
                                                                         vgrow="SOMETIMES"/>
                                                         <RowConstraints minHeight="10.0" prefHeight="30.0"
                                                                         vgrow="SOMETIMES"/>
-                                                        <RowConstraints minHeight="10.0" prefHeight="30.0"
-                                                                        vgrow="SOMETIMES"/>
                                                     </rowConstraints>
                                                     <children>
-                                                        <Button fx:id="runChartTemp" mnemonicParsing="false"
-                                                                onAction="#drawTemperatureChart" text="Построить"
-                                                                GridPane.columnIndex="3">
-                                                            <GridPane.margin>
-                                                                <Insets left="25.0"/>
-                                                            </GridPane.margin>
-                                                        </Button>
-                                                        <Button fx:id="clearTempChart" mnemonicParsing="false"
-                                                                onAction="#clearTemperatureChart" text="Очистить"
-                                                                GridPane.columnIndex="4">
-                                                            <GridPane.margin>
-                                                                <Insets left="25.0"/>
-                                                            </GridPane.margin>
-                                                        </Button>
-                                                        <Button mnemonicParsing="false" text="Сохранить"
+                                                        <Button fx:id="saveTemperChart" mnemonicParsing="false"
+                                                                onAction="#saveTemperImage" text="Сохранить"
                                                                 GridPane.columnIndex="3" GridPane.rowIndex="1">
                                                             <GridPane.margin>
                                                                 <Insets left="25.0"/>
                                                             </GridPane.margin>
                                                         </Button>
-                                                        <HBox GridPane.columnIndex="4" GridPane.rowIndex="1">
-                                                            <children>
-                                                                <Button mnemonicParsing="false" text="+">
-                                                                    <HBox.margin>
-                                                                        <Insets left="25.0" top="9.0"/>
-                                                                    </HBox.margin>
-                                                                </Button>
-                                                                <Button mnemonicParsing="false" prefHeight="26.0"
-                                                                        prefWidth="28.0" text="-">
-                                                                    <HBox.margin>
-                                                                        <Insets left="15.0" top="9.0"/>
-                                                                    </HBox.margin>
-                                                                </Button>
-                                                            </children>
-                                                        </HBox>
-                                                        <Label fx:id="lbl" text="Label" GridPane.columnIndex="2"/>
+                                                        <HBox GridPane.columnIndex="4" GridPane.rowIndex="1"/>
                                                     </children>
                                                 </GridPane>
                                                 <GridPane layoutX="10.0" layoutY="582.0" GridPane.columnIndex="1"
@@ -758,45 +729,16 @@
                                                                         vgrow="SOMETIMES"/>
                                                         <RowConstraints minHeight="10.0" prefHeight="30.0"
                                                                         vgrow="SOMETIMES"/>
-                                                        <RowConstraints minHeight="10.0" prefHeight="30.0"
-                                                                        vgrow="SOMETIMES"/>
                                                     </rowConstraints>
                                                     <children>
-                                                        <Button fx:id="runChartViscos" mnemonicParsing="false"
-                                                                onAction="#drawViscosityChart" text="Построить"
-                                                                GridPane.columnIndex="3">
-                                                            <GridPane.margin>
-                                                                <Insets left="25.0"/>
-                                                            </GridPane.margin>
-                                                        </Button>
-                                                        <Button fx:id="clearViscChart" mnemonicParsing="false"
-                                                                onAction="#clearViscosityChart" text="Очистить"
-                                                                GridPane.columnIndex="4">
-                                                            <GridPane.margin>
-                                                                <Insets left="25.0"/>
-                                                            </GridPane.margin>
-                                                        </Button>
-                                                        <Button mnemonicParsing="false" text="Сохранить"
+                                                        <Button fx:id="saveViscosChart" mnemonicParsing="false"
+                                                                onAction="#saveViscImage" text="Сохранить"
                                                                 GridPane.columnIndex="3" GridPane.rowIndex="1">
                                                             <GridPane.margin>
                                                                 <Insets left="25.0"/>
                                                             </GridPane.margin>
                                                         </Button>
-                                                        <HBox GridPane.columnIndex="4" GridPane.rowIndex="1">
-                                                            <children>
-                                                                <Button mnemonicParsing="false" text="+">
-                                                                    <HBox.margin>
-                                                                        <Insets left="25.0" top="9.0"/>
-                                                                    </HBox.margin>
-                                                                </Button>
-                                                                <Button mnemonicParsing="false" prefHeight="26.0"
-                                                                        prefWidth="28.0" text="-">
-                                                                    <HBox.margin>
-                                                                        <Insets left="15.0" top="9.0"/>
-                                                                    </HBox.margin>
-                                                                </Button>
-                                                            </children>
-                                                        </HBox>
+                                                        <HBox GridPane.columnIndex="4" GridPane.rowIndex="1"/>
                                                     </children>
                                                 </GridPane>
                                             </children>

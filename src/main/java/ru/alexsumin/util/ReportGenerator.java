@@ -28,6 +28,21 @@ public class ReportGenerator {
 
     }
 
+    private static void widthCellsAcrossRow(XWPFTable table, int rowNum, int colNum, int width) {
+        XWPFTableCell cell = table.getRow(rowNum).getCell(colNum);
+        if (cell.getCTTc().getTcPr() == null)
+            cell.getCTTc().addNewTcPr();
+        if (cell.getCTTc().getTcPr().getTcW() == null)
+            cell.getCTTc().getTcPr().addNewTcW();
+        cell.getCTTc().getTcPr().getTcW().setW(BigInteger.valueOf((long) width));
+    }
+
+    private static void setRun(XWPFRun run, String fontFamily, int fontSize, String text) {
+        run.setFontFamily(fontFamily);
+        run.setFontSize(fontSize);
+        run.setText(text);
+    }
+
     public void setValues(List<Double> values) {
         this.values = values;
     }
@@ -130,11 +145,6 @@ public class ReportGenerator {
             paragraphConfig2.setText("Таблица 1 - Текущие параметры состояния");
 
 
-//            XWPFParagraph bodyParagraph3 = docxModel.createParagraph();
-//            bodyParagraph.setAlignment(ParagraphAlignment.CENTER);
-//            XWPFRun paragraphConfig3 = bodyParagraph.createRun();
-//            paragraphConfig3.setItalic(false);
-//            paragraphConfig3.setFontSize(12);
             //create table
             XWPFTable table = docxModel.createTable();
 
@@ -150,9 +160,6 @@ public class ReportGenerator {
             setRun(paragraphCell3.createRun(), "Times New Roman", 11, "Вязкость, Па∙с");
             tableRowOne.setHeight(350);
 
-//            tableRowOne.getCell(0).setText("Шаг");
-//            tableRowOne.addNewTableCell().setText("Температура");
-//            tableRowOne.addNewTableCell().setText("Вязкость");
 
 
             widthCellsAcrossRow(table, 0, 0, 1700);
@@ -169,9 +176,7 @@ public class ReportGenerator {
                 setRun(paragraphSecondCell.createRun(), "Times New Roman", 10, String.valueOf(listOfResults.get(i).getTemperature()));
                 XWPFParagraph paragraphThirdCell = tableRow.getCell(2).addParagraph();
                 setRun(paragraphThirdCell.createRun(), "Times New Roman", 10, String.valueOf(listOfResults.get(i).getViscosity()));
-//                tableRow.getCell(0).setText(String.valueOf(listOfResults.get(i).getStep()));
-//                tableRow.getCell(1).setText(String.valueOf(listOfResults.get(i).getTemperature()));
-//                tableRow.getCell(2).setText(String.valueOf(listOfResults.get(i).getViscosity()));
+
 
             }
 
@@ -184,22 +189,6 @@ public class ReportGenerator {
             e.printStackTrace();
         }
         System.out.println("Успешно записан в файл");
-    }
-
-
-    private static void widthCellsAcrossRow(XWPFTable table, int rowNum, int colNum, int width) {
-        XWPFTableCell cell = table.getRow(rowNum).getCell(colNum);
-        if (cell.getCTTc().getTcPr() == null)
-            cell.getCTTc().addNewTcPr();
-        if (cell.getCTTc().getTcPr().getTcW() == null)
-            cell.getCTTc().getTcPr().addNewTcW();
-        cell.getCTTc().getTcPr().getTcW().setW(BigInteger.valueOf((long) width));
-    }
-
-    private static void setRun(XWPFRun run, String fontFamily, int fontSize, String text) {
-        run.setFontFamily(fontFamily);
-        run.setFontSize(fontSize);
-        run.setText(text);
     }
 
 }
