@@ -1,6 +1,9 @@
 package ru.alexsumin;
 
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -16,18 +19,15 @@ import java.util.Optional;
  */
 public class Main extends Application {
 
-    private final String USER_LOGIN = "admin",
-            USER_PASSWORD = "password";
+    private final String USER_PASSWORD = "password";
     private boolean isAdmin;
 
-    public static void main(String[] args) throws Exception {
-
-        launch(args);
+    public boolean isAdmin() {
+        return isAdmin;
     }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-
 
         if (!openLoginDialog()) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -61,30 +61,52 @@ public class Main extends Application {
         GridPane grid = new GridPane();
         grid.setHgap(10);
         grid.setVgap(10);
-
-        TextField username = new TextField();
-        username.setPromptText("Username");
         PasswordField password = new PasswordField();
         password.setPromptText("Password");
-
-        grid.add(new Label("Username:"), 0, 0);
-        grid.add(username, 1, 0);
-        grid.add(new Label("Password:"), 0, 1);
-        grid.add(password, 1, 1);
-
+        password.setVisible(false);
+        Label lbl = new Label("Password:");
+        lbl.setVisible(false);
 
         Node loginButton = dialog.getDialogPane().lookupButton(loginButtonType);
         loginButton.setDisable(true);
 
-        username.textProperty().addListener((observable, oldValue, newValue) -> {
-            loginButton.setDisable(newValue.trim().isEmpty());
+
+        final ChoiceBox cb = new ChoiceBox(FXCollections.observableArrayList("Исследователь", "Администратор"));
+        cb.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                if (newValue.equals(0)) {
+                    lbl.setVisible(false);
+                    password.setVisible(false);
+                    loginButton.setDisable(false);
+                } else {
+                    loginButton.setDisable(true);
+                    lbl.setVisible(true);
+                    password.setVisible(true);
+                    password.textProperty().addListener((ObservableValue<? extends String> obv, String oldVal, String newVal) -> {
+                        loginButton.setDisable(newVal.trim().isEmpty());
+                    });
+                }
+
+
+            }
         });
+
+        cb.setValue("Исследователь");
+
+
+        grid.add(new Label("Username:"), 0, 0);
+        grid.add(cb, 1, 0);
+        grid.add(lbl, 0, 1);
+        grid.add(password, 1, 1);
+
+
 
         dialog.getDialogPane().setContent(grid);
 
         dialog.setResultConverter(dialogButton -> {
             if (dialogButton == loginButtonType) {
-                return new LoginData(username.getText(), password.getText());
+                return new LoginData((String) cb.getValue(), password.getText());
             } else {
                 System.exit(0);
             }
@@ -96,12 +118,12 @@ public class Main extends Application {
         LoginData ld = result.get();
 
 
-        if (!(ld.login.equals(USER_LOGIN) && ld.password.equals(USER_PASSWORD))) return false;
+        if ((ld.login.equals("Исследователь")) | ((ld.login == "Администратор") && ld.password.equals(USER_PASSWORD)))
+            return true;
 
-        return true;
+        return false;
     }
 }
-
 
 class LoginData {
     public String login;
