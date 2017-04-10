@@ -64,6 +64,7 @@ public class Main extends Application {
         PasswordField password = new PasswordField();
         password.setPromptText("Password");
         password.setVisible(false);
+        password.setTooltip(new Tooltip("Введите пароль"));
         Label lbl = new Label("Password:");
         lbl.setVisible(false);
 
@@ -91,7 +92,7 @@ public class Main extends Application {
 
             }
         });
-
+        cb.setTooltip(new Tooltip("Выберите категорию пользователя"));
         cb.setValue("Исследователь");
 
 
@@ -99,7 +100,6 @@ public class Main extends Application {
         grid.add(cb, 1, 0);
         grid.add(lbl, 0, 1);
         grid.add(password, 1, 1);
-
 
 
         dialog.getDialogPane().setContent(grid);
@@ -118,8 +118,11 @@ public class Main extends Application {
         LoginData ld = result.get();
 
 
-        if ((ld.login.equals("Исследователь")) | ((ld.login == "Администратор") && ld.password.equals(USER_PASSWORD)))
+        if (ld.login.equals("Исследователь")) return true;
+        else if ((ld.login == "Администратор") && ld.password.equals(USER_PASSWORD)) {
+            isAdmin = true;
             return true;
+        }
 
         return false;
     }

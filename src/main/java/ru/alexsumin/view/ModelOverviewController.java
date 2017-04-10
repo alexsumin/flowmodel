@@ -56,10 +56,6 @@ public class ModelOverviewController {
         return t;
     };
     @FXML
-    Label lbl;
-    Data dt;
-    private ObservableList<Result> results = FXCollections.observableArrayList();
-    @FXML
     private LineChart<Number, Number> viscosityChart;
     @FXML
     private LineChart<Number, Number> tempChart;
@@ -84,9 +80,7 @@ public class ModelOverviewController {
     @FXML
     private ArrayList<TextField> fields;
     @FXML
-    private Button runChartTemp, clearTempChart, clearViscChart, runChartViscos;
-    @FXML
-    private Button reportButton;
+    private Button calculateButton, reportButton;
     @FXML
     private Label timeCalculate;
     @FXML
@@ -94,7 +88,6 @@ public class ModelOverviewController {
     @FXML
     private ContextMenu table_context_menu, chart_context_menu;
     private FileChooser fileChooser = new FileChooser();
-    private Main main;
     private ReportGenerator report = new ReportGenerator();
     @FXML
     private Button saveTemperChart, saveViscosChart;
@@ -102,7 +95,11 @@ public class ModelOverviewController {
     private NumberAxis xAis1, xAxis2;
     @FXML
     private NumberAxis yAxis1, yAxis2;
-    private boolean isCalculated;
+    private boolean isCalculated = false;
+    private Data dt;
+    private Main main = new Main();
+    private ObservableList<Result> results = FXCollections.observableArrayList();
+
 
     public ModelOverviewController() {
     }
@@ -134,13 +131,17 @@ public class ModelOverviewController {
 
         initContextMenuChart();
 
-        for (TextField tf :
-                fields) {
+        for (TextField tf : fields) {
             createDefenceFromStupid(tf);
+
         }
 
         createDefenceFromStupid(stepField, Double.parseDouble(lengthField.getText()));
+        stepField.setTooltip(new Tooltip("Введите величину не большую " + Double.parseDouble(lengthField.getText())));
         timeCalculate.setVisible(false);
+
+        calculateButton.setTooltip(new Tooltip("Нажмите, чтобы произвести расчёт"));
+        reportButton.setTooltip(new Tooltip("Нажмите, чтобы сгенерировать отчёт"));
 
         yAxis1.setAutoRanging(false);
         yAxis2.setAutoRanging(false);
@@ -149,6 +150,11 @@ public class ModelOverviewController {
         tempChart.getYAxis().setLabel("Температура, °С");
         viscosityChart.getXAxis().setLabel("Координата по длине канала, м");
         viscosityChart.getYAxis().setLabel("Вязкость, Па∙с");
+
+        //TODO: ChoiceBox с типом материала, кнопки удалить, добавить, сохранить
+        if (main.isAdmin()) {
+
+        }
 
 
     }
@@ -338,8 +344,8 @@ public class ModelOverviewController {
                 alert.showAndWait();
             } else {
                 Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("Ошибка");
-                alert.setHeaderText("Не указан путь для сохранения файла.\n Отчет не был сохранён");
+                alert.setTitle("Предупреждение");
+                alert.setHeaderText("Не указан путь для сохранения файла.\nОтчёт не был сохранён");
                 alert.showAndWait();
                 return;
             }
