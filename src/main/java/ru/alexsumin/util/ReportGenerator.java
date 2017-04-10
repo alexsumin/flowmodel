@@ -5,6 +5,7 @@ import org.apache.poi.xwpf.usermodel.*;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTSectPr;
 import ru.alexsumin.model.Result;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -17,11 +18,14 @@ public class ReportGenerator {
     List<Double> values = new ArrayList<>();
     List<Result> listOfResults = new ArrayList<>();
     long time;
+    File file;
+
 
     ReportGenerator(List values, List results, long time) {
         this.values = values;
         this.listOfResults = results;
         this.time = time;
+
     }
 
     public ReportGenerator() {
@@ -55,7 +59,7 @@ public class ReportGenerator {
         this.time = time;
     }
 
-    public void create() {
+    public void create(File file) {
         try {
             // создаем модель docx документа,
             // к которой будем прикручивать наполнение (колонтитулы, текст)
@@ -181,8 +185,12 @@ public class ReportGenerator {
             }
 
             // сохраняем модель docx документа в файл
-            FileOutputStream outputStream = new FileOutputStream("Report.docx");
+
+
+            FileOutputStream outputStream = new FileOutputStream(file);
+
             docxModel.write(outputStream);
+            outputStream.flush();
             outputStream.close();
 
         } catch (Exception e) {

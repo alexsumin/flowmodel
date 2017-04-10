@@ -4,26 +4,17 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.Cursor;
-import javafx.scene.Node;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
-import javafx.util.converter.DoubleStringConverter;
-import javafx.util.converter.NumberStringConverter;
 import ru.alexsumin.Main;
 import ru.alexsumin.model.Data;
 import ru.alexsumin.model.Result;
@@ -32,15 +23,10 @@ import ru.alexsumin.util.ReportGenerator;
 import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
-import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
-import java.text.ParsePosition;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 import java.util.function.UnaryOperator;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by alex on 15.03.17.
@@ -159,9 +145,9 @@ public class ModelOverviewController {
         yAxis1.setAutoRanging(false);
         yAxis2.setAutoRanging(false);
 
-        tempChart.getXAxis().setLabel("Длина канала, м");
+        tempChart.getXAxis().setLabel("Координата по длине канала, м");
         tempChart.getYAxis().setLabel("Температура, °С");
-        viscosityChart.getXAxis().setLabel("Длина канала, м");
+        viscosityChart.getXAxis().setLabel("Координата по длине канала, м");
         viscosityChart.getYAxis().setLabel("Вязкость, Па∙с");
 
 
@@ -335,35 +321,37 @@ public class ModelOverviewController {
     @FXML
     public void generateReport(final ActionEvent event) {
 
-        File file = fileChooser.showSaveDialog(null);
+        if (isCalculated) {
+            FileChooser fileChooser = new FileChooser();
+            FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Microsoft Office Word (*.docx)", "*.docx");
+            fileChooser.getExtensionFilters().add(extFilter);
 
-        if (file == null) return;
-
-        WritableImage image = viscosityChart.snapshot(new SnapshotParameters(), null);
-
-        try {
-            ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", file);
-        } catch (IOException ex) {
-
-
-            if (isCalculated) {
+            File file = fileChooser.showSaveDialog(null);
+            if (file != null) {
 
                 report.setValues(dt.getValues());
                 report.setListOfResults(results);
-                report.create();
+                report.create(file);
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Отчёт");
                 alert.setHeaderText("Отчёт успешно сохранён.");
                 alert.showAndWait();
             } else {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
+                Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setTitle("Ошибка");
-                alert.setHeaderText("Сперва необходимо произвести расчёт!");
+                alert.setHeaderText("Не указан путь для сохранения файла.\n Отчет не был сохранён");
                 alert.showAndWait();
                 return;
             }
 
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Ошибка");
+            alert.setHeaderText("Сперва необходимо произвести расчёт!");
+            alert.showAndWait();
+            return;
         }
+    }
 
     @FXML
     private void saveTemperImage(ActionEvent event) {
