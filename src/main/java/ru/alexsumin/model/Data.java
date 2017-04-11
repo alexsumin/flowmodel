@@ -158,9 +158,9 @@ public class Data {
         values.add(reductionTemperature);
         values.add(flowIndex);
         values.add(emissionFactor);
-        values.add(currentTemperature);
-        values.add(currentViscosity);
-        values.add(canalPerformance);
+        values.add(getCurrentTemperature());
+        values.add(getCurrentViscosity());
+        values.add(getCanalPerformance());
         return values;
     }
 

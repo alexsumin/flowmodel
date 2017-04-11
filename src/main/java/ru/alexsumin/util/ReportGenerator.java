@@ -141,9 +141,9 @@ public class ReportGenerator {
             paragraphConfig2.addBreak();
             paragraphConfig2.setText("Температура продукта, °С. T = " + values.get(13));
             paragraphConfig2.addBreak();
-            paragraphConfig2.setText("Вязкость продукта, Па∙с. V = " + values.get(14));
+            paragraphConfig2.setText("Вязкость продукта, Па∙с. V = " + (int) Math.floor(values.get(14)));
             paragraphConfig2.addBreak();
-            paragraphConfig2.setText("Производительность канала, кг/ч. Q = " + values.get(15));
+            paragraphConfig2.setText("Производительность канала, кг/ч. Q = " + (int) Math.floor(values.get(15)));
             paragraphConfig2.addBreak();
             paragraphConfig2.addBreak();
             paragraphConfig2.setText("Таблица 1 - Текущие параметры состояния");

@@ -280,7 +280,6 @@ public class ModelOverviewController {
         for (XYChart.Data<Double, Double> s : series.getData()) {
             s.getNode().addEventHandler(MouseEvent.MOUSE_ENTERED, event -> {
                 Tooltip tooltip = new Tooltip("x: " + s.getXValue() + "\ny: " + s.getYValue());
-
                 Tooltip.install(s.getNode(), tooltip);
 
             });
