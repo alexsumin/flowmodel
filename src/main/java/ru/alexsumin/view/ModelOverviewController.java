@@ -4,13 +4,20 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextField;
 import javafx.scene.image.WritableImage;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
@@ -21,6 +28,9 @@ import ru.alexsumin.model.Result;
 import ru.alexsumin.util.ReportGenerator;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormatSymbols;
@@ -58,15 +68,18 @@ public class ModelOverviewController {
     @FXML
     private LineChart<Number, Number> viscosityChart;
     @FXML
-    private LineChart<Number, Number> tempChart;
+    private LineChart<Number, Number> temperChart;
     @FXML
     private TableColumn<Result, Number> stepColumn;
     @FXML
     private TableColumn<Result, Number> temperatureColumn;
     @FXML
     private TableColumn<Result, Number> viscosityColumn;
+//    @FXML
+//    private TextField stepField;
     @FXML
-    private TextField stepField;
+    private Spinner stepField = new Spinner(new SpinnerValueFactory.DoubleSpinnerValueFactory(0.1, 10.6,
+        Double.parseDouble(STEP_VALUE), 0.1));
     @FXML
     private TextField widthField, lengthField, depthField;
     @FXML
@@ -99,6 +112,10 @@ public class ModelOverviewController {
     private Data dt;
     private Main main = new Main();
     private ObservableList<Result> results = FXCollections.observableArrayList();
+    public WritableImage imageFirstChart, imageSecondChart;
+    static final String STEP_VALUE = "0.1";
+    @FXML
+    EventHandler<KeyEvent> enterKeyEventHandler;
 
 
     public ModelOverviewController() {
@@ -114,6 +131,12 @@ public class ModelOverviewController {
 
     @FXML
     private void initialize() {
+        stepField.setEditable(true);
+        enterSpinner();
+
+
+
+
 
 
         FileChooser.ExtensionFilter filter1 = new FileChooser.ExtensionFilter("Документы Microsoft Office Word", "*.docx");
@@ -136,7 +159,7 @@ public class ModelOverviewController {
 
         }
 
-        createDefenceFromStupid(stepField, Double.parseDouble(lengthField.getText()));
+        //createDefenceFromStupid(stepField, Double.parseDouble(lengthField.getText()));
         stepField.setTooltip(new Tooltip("Введите величину не большую " + Double.parseDouble(lengthField.getText())));
         timeCalculate.setVisible(false);
 
@@ -146,8 +169,8 @@ public class ModelOverviewController {
         yAxis1.setAutoRanging(false);
         yAxis2.setAutoRanging(false);
 
-        tempChart.getXAxis().setLabel("Координата по длине канала, м");
-        tempChart.getYAxis().setLabel("Температура, °С");
+        temperChart.getXAxis().setLabel("Координата по длине канала, м");
+        temperChart.getYAxis().setLabel("Температура, °С");
         viscosityChart.getXAxis().setLabel("Координата по длине канала, м");
         viscosityChart.getYAxis().setLabel("Вязкость, Па∙с");
 
@@ -204,7 +227,7 @@ public class ModelOverviewController {
         chart_context_menu = new ContextMenu(save_chart, clear_chart);
 
         clear_chart.setOnAction(e -> {
-            tempChart.getData().clear();
+            temperChart.getData().clear();
         });
 
         save_chart.setOnAction(e -> {
@@ -212,7 +235,7 @@ public class ModelOverviewController {
 
             if (file == null) return;
 
-            WritableImage image = tempChart.snapshot(new SnapshotParameters(), null);
+            WritableImage image = temperChart.snapshot(new SnapshotParameters(), null);
 
             try {
                 ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", file);
@@ -233,10 +256,11 @@ public class ModelOverviewController {
     public void calculate(final ActionEvent event) {
         long startTime = System.currentTimeMillis();
 
-        double usersData[] = new double[fields.size()];
+        double usersData[] = new double[fields.size()+1];
+        usersData[0] = Double.valueOf(stepField.getEditor().getText().replace(",","."));
 
-        for (int i = 0; i < usersData.length; i++) {
-            usersData[i] = Double.parseDouble(fields.get(i).getText());
+        for (int i = 0; i < usersData.length-1; i++) {
+            usersData[i+1] = Double.parseDouble(fields.get(i).getText());
             System.out.println(usersData[i]);
 
         }
@@ -254,7 +278,7 @@ public class ModelOverviewController {
         isCalculated = true;
 
 
-        tempChart.getData().clear();
+        temperChart.getData().clear();
         viscosityChart.getData().clear();
         drawTemperatureChart();
         drawViscosityChart();
@@ -297,7 +321,7 @@ public class ModelOverviewController {
             tmp = results.get(i);
             resultsTemper[i] = new XYChart.Data(tmp.getStep(), tmp.getTemperature());
         }
-        plot(resultsTemper, tempChart);
+        plot(resultsTemper, temperChart);
 
 
     }
@@ -315,7 +339,7 @@ public class ModelOverviewController {
     }
 
     public void clearTemperatureChart(final ActionEvent event) {
-        tempChart.getData().clear();
+        temperChart.getData().clear();
     }
 
     public void clearViscosityChart(final ActionEvent event) {
@@ -326,6 +350,7 @@ public class ModelOverviewController {
     @FXML
     public void generateReport(final ActionEvent event) {
 
+
         if (isCalculated) {
             FileChooser fileChooser = new FileChooser();
             FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Microsoft Office Word (*.docx)", "*.docx");
@@ -334,9 +359,18 @@ public class ModelOverviewController {
             File file = fileChooser.showSaveDialog(null);
             if (file != null) {
 
+
+
+
+                imageFirstChart = temperChart.snapshot(new SnapshotParameters(), null);
+                imageSecondChart = viscosityChart.snapshot(new SnapshotParameters(), null);
+
+
+
                 report.setValues(dt.getValues());
                 report.setListOfResults(results);
                 report.create(file);
+                //report.setPics(s1, s2);
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Отчёт");
                 alert.setHeaderText("Отчёт успешно сохранён.");
@@ -365,7 +399,7 @@ public class ModelOverviewController {
 
         if (file == null) return;
 
-        WritableImage image = tempChart.snapshot(new SnapshotParameters(), null);
+        WritableImage image = temperChart.snapshot(new SnapshotParameters(), null);
 
         try {
             ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", file);
@@ -377,6 +411,33 @@ public class ModelOverviewController {
             return;
         }
 
+    }
+
+
+    private void enterSpinner() {
+        enterKeyEventHandler = event -> {
+
+            // handle users "enter key event"
+            if (event.getCode() == KeyCode.ENTER) {
+
+                try {
+                    // yes, using exception for control is a bad solution ;-)
+                    Double.valueOf(stepField.getEditor().textProperty().get().replace(",", "."));
+                }
+                catch (NumberFormatException e) {
+
+                    // show message to user: "only numbers allowed"
+
+                    // reset editor to INITIAL_VALUE
+                    stepField.getEditor().textProperty().set(STEP_VALUE);
+                }
+            }
+        };
+
+        // note: use KeyEvent.KEY_PRESSED, because KeyEvent.KEY_TYPED is to late, spinners
+        // SpinnerValueFactory reached new value before key released an SpinnerValueFactory will
+        // throw an exception
+        stepField.getEditor().addEventHandler(KeyEvent.KEY_PRESSED, enterKeyEventHandler);
     }
 
     @FXML

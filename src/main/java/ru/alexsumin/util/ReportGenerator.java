@@ -1,12 +1,16 @@
 package ru.alexsumin.util;
 
+import javafx.embed.swing.SwingFXUtils;
+import org.apache.poi.ss.util.ImageUtils;
+import org.apache.poi.util.Units;
 import org.apache.poi.xwpf.model.XWPFHeaderFooterPolicy;
 import org.apache.poi.xwpf.usermodel.*;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTSectPr;
 import ru.alexsumin.model.Result;
 
-import java.io.File;
-import java.io.FileOutputStream;
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.io.*;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,8 +21,10 @@ import java.util.List;
 public class ReportGenerator {
     List<Double> values = new ArrayList<>();
     List<Result> listOfResults = new ArrayList<>();
-    long time;
-    File file;
+    private long time;
+    private File file;
+    private ByteArrayOutputStream pic1;
+    private ByteArrayOutputStream pic2;
 
 
     ReportGenerator(List values, List results, long time) {
@@ -165,7 +171,6 @@ public class ReportGenerator {
             tableRowOne.setHeight(350);
 
 
-
             widthCellsAcrossRow(table, 0, 0, 1700);
             widthCellsAcrossRow(table, 0, 1, 1700);
             widthCellsAcrossRow(table, 0, 2, 1700);
@@ -184,6 +189,15 @@ public class ReportGenerator {
 
             }
 
+            XWPFParagraph bodyParagraph3 = docxModel.createParagraph();
+            XWPFRun run = bodyParagraph3.createRun();
+            String imageName1 = "picture";
+
+            InputStream is = new ByteArrayInputStream(pic1.toByteArray());
+
+            //docxModel.addPictureData(pic1, Document.PICTURE_TYPE_PNG);
+
+
             // сохраняем модель docx документа в файл
 
 
@@ -199,4 +213,8 @@ public class ReportGenerator {
         System.out.println("Успешно записан в файл");
     }
 
+    public void setPics(ByteArrayOutputStream s1, ByteArrayOutputStream s2) {
+        pic1 = s1;
+        pic2 = s2;
+    }
 }
