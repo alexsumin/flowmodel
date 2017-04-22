@@ -1,16 +1,14 @@
 package ru.alexsumin.util;
 
-import javafx.embed.swing.SwingFXUtils;
-import org.apache.poi.ss.util.ImageUtils;
 import org.apache.poi.util.Units;
 import org.apache.poi.xwpf.model.XWPFHeaderFooterPolicy;
 import org.apache.poi.xwpf.usermodel.*;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTSectPr;
 import ru.alexsumin.model.Result;
 
-import javax.imageio.ImageIO;
-import java.awt.*;
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,8 +21,8 @@ public class ReportGenerator {
     List<Result> listOfResults = new ArrayList<>();
     private long time;
     private File file;
-    private ByteArrayOutputStream pic1;
-    private ByteArrayOutputStream pic2;
+    private String pic1;
+    private String pic2;
 
 
     ReportGenerator(List values, List results, long time) {
@@ -89,8 +87,8 @@ public class ReportGenerator {
             XWPFParagraph bodyParagraph2 = docxModel.createParagraph();
             bodyParagraph2.setAlignment(ParagraphAlignment.LEFT);
             XWPFRun paragraphConfig2 = bodyParagraph2.createRun();
-            paragraphConfig2.setItalic(true);
-            paragraphConfig2.setFontSize(12);
+            //paragraphConfig2.setItalic(true);
+            paragraphConfig2.setFontSize(14);
             paragraphConfig2.setFontFamily("Times New Roman");
             paragraphConfig2.setText("Входные данные.");
             paragraphConfig2.addBreak();
@@ -150,9 +148,35 @@ public class ReportGenerator {
             paragraphConfig2.setText("Вязкость продукта, Па∙с. V = " + (int) Math.floor(values.get(14)));
             paragraphConfig2.addBreak();
             paragraphConfig2.setText("Производительность канала, кг/ч. Q = " + (int) Math.floor(values.get(15)));
-            paragraphConfig2.addBreak();
-            paragraphConfig2.addBreak();
-            paragraphConfig2.setText("Таблица 1 - Текущие параметры состояния");
+            paragraphConfig2.addBreak(BreakType.PAGE);
+
+
+            XWPFParagraph bodyParagraph3 = docxModel.createParagraph();
+            XWPFRun run = bodyParagraph3.createRun();
+            bodyParagraph3.setAlignment(ParagraphAlignment.CENTER);
+            XWPFRun paragraphConfig3 = bodyParagraph3.createRun();
+            paragraphConfig3.setFontSize(12);
+            paragraphConfig3.setFontFamily("Times New Roman");
+
+            XWPFPicture picture1 = paragraphConfig3.addPicture(new FileInputStream(pic1), XWPFDocument.PICTURE_TYPE_PNG, pic1, Units.toEMU(315), Units.toEMU(302));
+            paragraphConfig3.addBreak();
+            paragraphConfig3.setText("Рисунок 1 - Зависимость температуры от координаты по длине канала");
+            paragraphConfig3.addBreak();
+            paragraphConfig3.addBreak();
+            XWPFPicture picture2 = paragraphConfig3.addPicture(new FileInputStream(pic2), XWPFDocument.PICTURE_TYPE_PNG, pic2, Units.toEMU(315), Units.toEMU(302));
+            paragraphConfig3.addBreak();
+            paragraphConfig3.setText("Рисунок 2 - Зависимость вязкости от координаты по длине канала");
+            paragraphConfig3.addBreak();
+            paragraphConfig3.addBreak(BreakType.PAGE);
+
+
+            XWPFParagraph bodyParagraph4 = docxModel.createParagraph();
+            bodyParagraph4.setAlignment(ParagraphAlignment.LEFT);
+            XWPFRun paragraphConfig4 = bodyParagraph4.createRun();
+            paragraphConfig4.setFontSize(12);
+            paragraphConfig4.setFontFamily("Times New Roman");
+            paragraphConfig4.setText("Таблица 1 - Текущие параметры состояния");
+
 
 
             //create table
@@ -164,7 +188,7 @@ public class ReportGenerator {
             setRun(paragraphCell.createRun(), "Times New Roman", 11, "Шаг, м");
             tableRowOne.addNewTableCell();
             XWPFParagraph paragraphCell2 = tableRowOne.getCell(1).addParagraph();
-            setRun(paragraphCell2.createRun(), "Times New Roman", 11, "Температура,°С");
+            setRun(paragraphCell2.createRun(), "Times New Roman", 11, "Температура, °С");
             tableRowOne.addNewTableCell();
             XWPFParagraph paragraphCell3 = tableRowOne.getCell(2).addParagraph();
             setRun(paragraphCell3.createRun(), "Times New Roman", 11, "Вязкость, Па∙с");
@@ -189,14 +213,6 @@ public class ReportGenerator {
 
             }
 
-            XWPFParagraph bodyParagraph3 = docxModel.createParagraph();
-            XWPFRun run = bodyParagraph3.createRun();
-            String imageName1 = "picture";
-
-            InputStream is = new ByteArrayInputStream(pic1.toByteArray());
-
-            //docxModel.addPictureData(pic1, Document.PICTURE_TYPE_PNG);
-
 
             // сохраняем модель docx документа в файл
 
@@ -213,8 +229,8 @@ public class ReportGenerator {
         System.out.println("Успешно записан в файл");
     }
 
-    public void setPics(ByteArrayOutputStream s1, ByteArrayOutputStream s2) {
-        pic1 = s1;
-        pic2 = s2;
+    public void setPics(String file1, String file2) {
+        pic1 = file1;
+        pic2 = file2;
     }
 }
