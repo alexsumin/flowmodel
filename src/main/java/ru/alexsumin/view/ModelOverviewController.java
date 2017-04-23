@@ -72,11 +72,11 @@ public class ModelOverviewController {
     private TableColumn<Result, Number> temperatureColumn;
     @FXML
     private TableColumn<Result, Number> viscosityColumn;
-//    @FXML
+    //    @FXML
 //    private TextField stepField;
     @FXML
     private Spinner stepField = new Spinner(new SpinnerValueFactory.DoubleSpinnerValueFactory(0.1, 10.6,
-        Double.parseDouble(STEP_VALUE), 0.1));
+            Double.parseDouble(STEP_VALUE), 0.1));
     @FXML
     private TextField widthField, lengthField, depthField;
     @FXML
@@ -475,4 +475,3 @@ public class ModelOverviewController {
 
 
 }
-

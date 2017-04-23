@@ -87,8 +87,8 @@ public class ReportGenerator {
             XWPFParagraph bodyParagraph2 = docxModel.createParagraph();
             bodyParagraph2.setAlignment(ParagraphAlignment.LEFT);
             XWPFRun paragraphConfig2 = bodyParagraph2.createRun();
-            paragraphConfig2.setItalic(true);
-            paragraphConfig2.setFontSize(12);
+            //paragraphConfig2.setItalic(true);
+            paragraphConfig2.setFontSize(14);
             paragraphConfig2.setFontFamily("Times New Roman");
             paragraphConfig2.setText("Входные данные.");
             paragraphConfig2.addBreak();
@@ -148,9 +148,34 @@ public class ReportGenerator {
             paragraphConfig2.setText("Вязкость продукта, Па∙с. V = " + (int) Math.floor(values.get(14)));
             paragraphConfig2.addBreak();
             paragraphConfig2.setText("Производительность канала, кг/ч. Q = " + (int) Math.floor(values.get(15)));
-            paragraphConfig2.addBreak();
-            paragraphConfig2.addBreak();
-            paragraphConfig2.setText("Таблица 1 - Текущие параметры состояния");
+            paragraphConfig2.addBreak(BreakType.PAGE);
+
+
+            XWPFParagraph bodyParagraph3 = docxModel.createParagraph();
+            XWPFRun run = bodyParagraph3.createRun();
+            bodyParagraph3.setAlignment(ParagraphAlignment.CENTER);
+            XWPFRun paragraphConfig3 = bodyParagraph3.createRun();
+            paragraphConfig3.setFontSize(12);
+            paragraphConfig3.setFontFamily("Times New Roman");
+
+            XWPFPicture picture1 = paragraphConfig3.addPicture(new FileInputStream(pic1), XWPFDocument.PICTURE_TYPE_PNG, pic1, Units.toEMU(315), Units.toEMU(302));
+            paragraphConfig3.addBreak();
+            paragraphConfig3.setText("Рисунок 1 - Зависимость температуры от координаты по длине канала");
+            paragraphConfig3.addBreak();
+            paragraphConfig3.addBreak();
+            XWPFPicture picture2 = paragraphConfig3.addPicture(new FileInputStream(pic2), XWPFDocument.PICTURE_TYPE_PNG, pic2, Units.toEMU(315), Units.toEMU(302));
+            paragraphConfig3.addBreak();
+            paragraphConfig3.setText("Рисунок 2 - Зависимость вязкости от координаты по длине канала");
+            paragraphConfig3.addBreak();
+            paragraphConfig3.addBreak(BreakType.PAGE);
+
+
+            XWPFParagraph bodyParagraph4 = docxModel.createParagraph();
+            bodyParagraph4.setAlignment(ParagraphAlignment.LEFT);
+            XWPFRun paragraphConfig4 = bodyParagraph4.createRun();
+            paragraphConfig4.setFontSize(12);
+            paragraphConfig4.setFontFamily("Times New Roman");
+            paragraphConfig4.setText("Таблица 1 - Текущие параметры состояния");
 
 
             //create table
@@ -162,7 +187,7 @@ public class ReportGenerator {
             setRun(paragraphCell.createRun(), "Times New Roman", 11, "Шаг, м");
             tableRowOne.addNewTableCell();
             XWPFParagraph paragraphCell2 = tableRowOne.getCell(1).addParagraph();
-            setRun(paragraphCell2.createRun(), "Times New Roman", 11, "Температура,°С");
+            setRun(paragraphCell2.createRun(), "Times New Roman", 11, "Температура, °С");
             tableRowOne.addNewTableCell();
             XWPFParagraph paragraphCell3 = tableRowOne.getCell(2).addParagraph();
             setRun(paragraphCell3.createRun(), "Times New Roman", 11, "Вязкость, Па∙с");
@@ -186,13 +211,6 @@ public class ReportGenerator {
 
 
             }
-
-            XWPFParagraph bodyParagraph3 = docxModel.createParagraph();
-            XWPFRun run = bodyParagraph3.createRun();
-
-
-            XWPFPicture picture = run.addPicture(new FileInputStream(pic1), XWPFDocument.PICTURE_TYPE_PNG, pic1, Units.toEMU(640), Units.toEMU(615));
-
 
 
             // сохраняем модель docx документа в файл
