@@ -11,10 +11,6 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TextField;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -28,9 +24,6 @@ import ru.alexsumin.model.Result;
 import ru.alexsumin.util.ReportGenerator;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormatSymbols;
@@ -42,6 +35,8 @@ import java.util.function.UnaryOperator;
  * Created by alex on 15.03.17.
  */
 public class ModelOverviewController {
+    static final String STEP_VALUE = "0.1";
+    public WritableImage imageFirstChart, imageSecondChart;
     @FXML
     TableView<Result> tableWithResult;
     UnaryOperator<TextFormatter.Change> filter = t -> {
@@ -65,6 +60,8 @@ public class ModelOverviewController {
 
         return t;
     };
+    @FXML
+    EventHandler<KeyEvent> enterKeyEventHandler;
     @FXML
     private LineChart<Number, Number> viscosityChart;
     @FXML
@@ -112,10 +109,6 @@ public class ModelOverviewController {
     private Data dt;
     private Main main = new Main();
     private ObservableList<Result> results = FXCollections.observableArrayList();
-    public WritableImage imageFirstChart, imageSecondChart;
-    static final String STEP_VALUE = "0.1";
-    @FXML
-    EventHandler<KeyEvent> enterKeyEventHandler;
 
 
     public ModelOverviewController() {
@@ -360,17 +353,30 @@ public class ModelOverviewController {
             if (file != null) {
 
 
+                WritableImage image1 = temperChart.snapshot(new SnapshotParameters(), null);
+                WritableImage image2 = viscosityChart.snapshot(new SnapshotParameters(), null);
 
+                String namePic1 = "temperChart.png";
+                String namePic2 = "viscosChart.png";
 
-                imageFirstChart = temperChart.snapshot(new SnapshotParameters(), null);
-                imageSecondChart = viscosityChart.snapshot(new SnapshotParameters(), null);
+                File pic1 = new File(namePic1);
+                File pic2 = new File(namePic2);
+                try {
+                    ImageIO.write(SwingFXUtils.fromFXImage(image1, null),
+                            "png", pic1);
+                    ImageIO.write(SwingFXUtils.fromFXImage(image2, null),
+                            "png", pic2);
 
+                } catch (IOException ex) {
+                    System.out.println(ex.getMessage());
+                }
 
 
                 report.setValues(dt.getValues());
                 report.setListOfResults(results);
+                report.setPics(namePic1, namePic2);
                 report.create(file);
-                //report.setPics(s1, s2);
+
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Отчёт");
                 alert.setHeaderText("Отчёт успешно сохранён.");
