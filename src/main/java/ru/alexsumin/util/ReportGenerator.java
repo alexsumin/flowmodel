@@ -120,10 +120,10 @@ public class ReportGenerator {
             paragraphConfig2.setText("3 Режимные параметры");
             paragraphConfig2.addBreak();
             paragraphConfig2.addTab();
-            paragraphConfig2.setText("3.1 Скорость движения крышки Vu = " + values.get(6) + " м/с");
+            paragraphConfig2.setText("3.1 Скорость движения крышки Vᵤ = " + values.get(6) + " м/с");
             paragraphConfig2.addBreak();
             paragraphConfig2.addTab();
-            paragraphConfig2.setText("3.2 Температура крышки Tu = " + values.get(7) + " °C");
+            paragraphConfig2.setText("3.2 Температура крышки Tᵤ = " + values.get(7) + " °C");
             paragraphConfig2.addBreak();
             paragraphConfig2.setText("4 Эмпирические коэффициенты математической модели");
             paragraphConfig2.addBreak();
@@ -134,7 +134,7 @@ public class ReportGenerator {
             paragraphConfig2.setText("4.2 Температурный коэффициент вязкости b = " + values.get(9) + " 1/°C");
             paragraphConfig2.addBreak();
             paragraphConfig2.addTab();
-            paragraphConfig2.setText("4.3 Температура приведения Tr = " + values.get(10) + " °C");
+            paragraphConfig2.setText("4.3 Температура приведения Tᵣ = " + values.get(10) + " °C");
             paragraphConfig2.addBreak();
             paragraphConfig2.addTab();
             paragraphConfig2.setText("4.4 Индекс течения материала n = " + values.get(11));
