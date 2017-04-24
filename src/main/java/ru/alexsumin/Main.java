@@ -26,6 +26,10 @@ public class Main extends Application {
         return isAdmin;
     }
 
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
+    }
+
     @Override
     public void start(Stage primaryStage) throws Exception {
 
@@ -46,7 +50,7 @@ public class Main extends Application {
         primaryStage.show();
     }
 
-    private boolean openLoginDialog() {
+    public boolean openLoginDialog() {
 
         Dialog<LoginData> dialog = new Dialog<>();
         dialog.setTitle("Login Dialog");

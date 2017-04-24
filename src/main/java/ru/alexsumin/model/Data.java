@@ -173,7 +173,12 @@ public class Data {
             results.add(result);
             this.currentLength += lengthStep;
         }
-        {
+        boolean isContains = false;
+        for (Result r : results) {
+            if (r.getStep() == length)
+                isContains = true;
+        }
+        if (!isContains) {
             calcOutput(length);
             Result lastResult = new Result(length, getCurrentTemperature(), getCurrentViscosity());
             results.add(lastResult);

@@ -14,51 +14,58 @@
             <menus>
                 <Menu mnemonicParsing="false" text="Главное меню">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="Сгенерировать отчёт"/>
-                        <MenuItem mnemonicParsing="false" text="О программе"/>
+                        <MenuItem mnemonicParsing="false" onAction="#generateReport" text="Сгенерировать отчёт"/>
+                        <MenuItem mnemonicParsing="false" onAction="#openAboutWindow" text="О программе"/>
                         <SeparatorMenuItem mnemonicParsing="false" />
-                        <MenuItem mnemonicParsing="false" text="Выход"/>
+                        <MenuItem fx:id="exitProgram" mnemonicParsing="false" text="Выход"/>
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Входные данные">
                     <items>
                         <Menu mnemonicParsing="false" text="Геометрические параметры канала">
                             <items>
-                                <MenuItem mnemonicParsing="false" text="Ширина, м"/>
-                                <MenuItem mnemonicParsing="false" text="Глубина, м"/>
-                                <MenuItem mnemonicParsing="false" text="Длина, м"/>
-                    </items>
-                        </Menu>
-                        <Menu mnemonicParsing="false" text="Параметры свойств материала">
-                    <items>
-                        <MenuItem mnemonicParsing="false" text="Плотность, кг/м³"/>
-                        <MenuItem mnemonicParsing="false" text="Удельная теплоемкость, Дж/(кг∙°С)"/>
-                        <MenuItem mnemonicParsing="false" text="Удельная теплоемкость, Дж/(кг∙°С)"/>
+                                <MenuItem mnemonicParsing="false" onAction="#focusOnWidthField" text="Ширина, м"/>
+                                <MenuItem mnemonicParsing="false" onAction="#focusOnLengthField" text="Длина, м"/>
+                                <MenuItem mnemonicParsing="false" onAction="#focusOnDepthField" text="Глубина, м"/>
                     </items>
                         </Menu>
                         <Menu mnemonicParsing="false" text="Режимные параметры">
                             <items>
-                                <MenuItem mnemonicParsing="false" text="Скорость движения крышки, м/с"/>
-                                <MenuItem mnemonicParsing="false" text="Температура крышки, °С"/>
+                                <MenuItem mnemonicParsing="false" onAction="#focusOnSpeedCoverField"
+                                          text="Скорость движения крышки, м/с"/>
+                                <MenuItem mnemonicParsing="false" onAction="#focusOnCoverTemperatureField"
+                                          text="Температура крышки, °С"/>
+                            </items>
+                        </Menu>
+                        <Menu mnemonicParsing="false" text="Параметры свойств материала">
+                            <items>
+                                <MenuItem mnemonicParsing="false" onAction="#focusOnDensityField"
+                                          text="Плотность, кг/м³"/>
+                                <MenuItem mnemonicParsing="false" onAction="#focusOnCapacityField"
+                                          text="Удельная теплоемкость, Дж/(кг∙°С)"/>
+                                <MenuItem mnemonicParsing="false" onAction="#focusOnMeltingTemperatureField"
+                                          text="Температура плавления, °С"/>
                             </items>
                         </Menu>
                         <Menu mnemonicParsing="false" text="Эмпирические коэффициенты математической модели">
                             <items>
-                                <MenuItem mnemonicParsing="false"
-                                          text="Коэффициент консистенции&amp;#10;материала, Па∙сⁿ"/>
-                                <MenuItem mnemonicParsing="false"
-                                          text="Температурный &amp;#10;коэффициент вязкости, 1/°С"/>
-                                <MenuItem mnemonicParsing="false" text="Температура приведения, °С"/>
-                                <MenuItem mnemonicParsing="false" text="Индекс течения материала"/>
-                                <MenuItem mnemonicParsing="false"
-                                          text="Коэффициент теплоотдачи &amp;#10;от крышки канала &amp;#10;к материалу, Вт/(м²∙°C)"/>
+                                <MenuItem mnemonicParsing="false" onAction="#focusOnConsFactorWithReductionField"
+                                          text="Коэффициент консистенции материала, Па∙сⁿ"/>
+                                <MenuItem mnemonicParsing="false" onAction="#focusOnViscosityFactorField"
+                                          text="Температурный коэффициент вязкости, 1/°С"/>
+                                <MenuItem mnemonicParsing="false" onAction="#focusOnReductionTemperatureField"
+                                          text="Температура приведения, °С"/>
+                                <MenuItem mnemonicParsing="false" onAction="#focusOnIndexOfMaterialField"
+                                          text="Индекс течения материала"/>
+                                <MenuItem mnemonicParsing="false" onAction="#focusOnEmissionFactorField"
+                                          text="Коэффициент теплоотдачи от крышки канала к материалу, Вт/(м²∙°C)"/>
                             </items>
                         </Menu>
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Пользователь">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="Сменить пользователя"/>
+                        <MenuItem mnemonicParsing="false" onAction="#openChangeUserDialog" text="Сменить пользователя"/>
                     </items>
                 </Menu>
             </menus>

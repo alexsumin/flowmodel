@@ -6,6 +6,9 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
@@ -18,6 +21,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import ru.alexsumin.Main;
 import ru.alexsumin.model.Data;
 import ru.alexsumin.model.Result;
@@ -39,6 +43,7 @@ public class ModelOverviewController {
     public WritableImage imageFirstChart, imageSecondChart;
     @FXML
     TableView<Result> tableWithResult;
+
     UnaryOperator<TextFormatter.Change> filter = t -> {
         DecimalFormatSymbols decimal = new DecimalFormatSymbols(Locale.getDefault());
         String sep = String.valueOf(decimal.getDecimalSeparator());
@@ -109,6 +114,7 @@ public class ModelOverviewController {
     private Data dt;
     private Main main = new Main();
     private ObservableList<Result> results = FXCollections.observableArrayList();
+    private boolean isAdmin = false;
 
 
     public ModelOverviewController() {
@@ -168,7 +174,8 @@ public class ModelOverviewController {
         viscosityChart.getYAxis().setLabel("Вязкость, Па∙с");
 
         //TODO: ChoiceBox с типом материала, кнопки удалить, добавить, сохранить
-        if (main.isAdmin()) {
+        isAdmin = main.isAdmin();
+        if (isAdmin) {
 
         }
 
@@ -293,6 +300,11 @@ public class ModelOverviewController {
         series.getData().addAll(points);
         lineChart.getData().addAll(series);
         lineChart.setLegendVisible(false);
+
+
+        lineChart.setStyle(".default-color0.chart-series-line { -fx-stroke: #MAGENTA; }");
+
+
 
         for (XYChart.Data<Double, Double> s : series.getData()) {
             s.getNode().addEventHandler(MouseEvent.MOUSE_ENTERED, event -> {
@@ -467,11 +479,130 @@ public class ModelOverviewController {
 
     }
 
+    @FXML
+    private void openChangeUserDialog(final ActionEvent e) {
+        if (!main.openLoginDialog()) {
+
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Ошибка");
+            alert.setHeaderText("Ошибка авторизации!");
+            alert.setContentText("Вы ввели неверные данные пользователя!");
+
+            alert.showAndWait();
+
+            return;
+
+        }
+
+        initialize();
+
+    }
 
     @FXML
-    public void exitProgram(final ActionEvent e) {
+    private void openAboutWindow(final ActionEvent event) {
+        Parent vbox;
+        try {
+            vbox = FXMLLoader.load(getClass().getClassLoader().getResource("/about.fxml"));
+            Stage stage = new Stage();
+            stage.setTitle("My New Stage Title");
+            stage.setScene(new Scene(vbox, 400, 300));
+            stage.show();
+            // Hide this current window (if this is what you want)
+            //((Node)(event.getSource())).getScene().getWindow().hide();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+    @FXML
+    private void exitProgram(final ActionEvent e) {
         System.exit(0);
     }
 
 
+    //HORRIBLE SOLUTION! TODO: use enum or something else!
+    @FXML
+    private void focusOnWidthField(final ActionEvent e) {
+        widthField.requestFocus();
+
+    }
+
+    @FXML
+    private void focusOnLengthField(final ActionEvent e) {
+        lengthField.requestFocus();
+
+    }
+
+    @FXML
+    private void focusOnDepthField(final ActionEvent e) {
+        depthField.requestFocus();
+
+    }
+
+    @FXML
+    private void focusOnDensityField(final ActionEvent e) {
+        densityField.requestFocus();
+
+    }
+
+    @FXML
+    private void focusOnCapacityField(final ActionEvent e) {
+        capacityField.requestFocus();
+
+    }
+
+    @FXML
+    private void focusOnMeltingTemperatureField(final ActionEvent e) {
+        meltingTemperatureField.requestFocus();
+
+    }
+
+    @FXML
+    private void focusOnSpeedCoverField(final ActionEvent e) {
+        speedCoverField.requestFocus();
+
+    }
+
+    @FXML
+    private void focusOnCoverTemperatureField(final ActionEvent e) {
+        coverTemperatureField.requestFocus();
+
+    }
+
+    @FXML
+    private void focusOnViscosityFactorField(final ActionEvent e) {
+        viscosityFactorField.requestFocus();
+
+    }
+
+    @FXML
+    private void focusOnReductionTemperatureField(final ActionEvent e) {
+        reductionTemperatureField.requestFocus();
+
+    }
+
+    @FXML
+    private void focusOnIndexOfMaterialField(final ActionEvent e) {
+        indexOfMaterialField.requestFocus();
+
+    }
+
+    @FXML
+    private void focusOnEmissionFactorField(final ActionEvent e) {
+        emissionFactorField.requestFocus();
+
+    }
+
+    @FXML
+    private void focusOnConsFactorWithReductionField(final ActionEvent e) {
+        consFactorWithReductionField.requestFocus();
+
+    }
 }
+
+
+
+
+
