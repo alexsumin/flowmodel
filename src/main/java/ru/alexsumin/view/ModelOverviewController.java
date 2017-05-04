@@ -7,6 +7,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
@@ -130,12 +131,8 @@ public class ModelOverviewController {
 
     @FXML
     private void initialize() {
-        stepField.setEditable(true);
+        stepField.setEditable(false);
         enterSpinner();
-
-
-
-
 
 
         FileChooser.ExtensionFilter filter1 = new FileChooser.ExtensionFilter("Документы Microsoft Office Word", "*.docx");
@@ -180,25 +177,6 @@ public class ModelOverviewController {
         }
 
 
-    }
-
-
-    private void createDefenceFromStupid(TextField textField, double maxValue) {
-        textField.setTextFormatter(new TextFormatter<>(filter));
-        textField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.isEmpty() || (newValue.equals("0.0")) || (newValue.equals("0")) || (newValue.equals("0."))
-                    || (newValue.equals(".0")) || (Double.parseDouble(newValue) > maxValue)) {
-                textField.setText(oldValue);
-            } else {
-                try {
-                    double value = Double.parseDouble(newValue);
-                    textField.setText("" + value);
-
-                } catch (NumberFormatException e) {
-                    textField.setText(oldValue);
-                }
-            }
-        });
     }
 
 
@@ -256,11 +234,11 @@ public class ModelOverviewController {
     public void calculate(final ActionEvent event) {
         long startTime = System.currentTimeMillis();
 
-        double usersData[] = new double[fields.size()+1];
-        usersData[0] = Double.valueOf(stepField.getEditor().getText().replace(",","."));
+        double usersData[] = new double[fields.size() + 1];
+        usersData[0] = Double.valueOf(stepField.getEditor().getText().replace(",", "."));
 
-        for (int i = 0; i < usersData.length-1; i++) {
-            usersData[i+1] = Double.parseDouble(fields.get(i).getText());
+        for (int i = 0; i < usersData.length - 1; i++) {
+            usersData[i + 1] = Double.parseDouble(fields.get(i).getText());
             System.out.println(usersData[i]);
 
         }
@@ -303,7 +281,6 @@ public class ModelOverviewController {
 
 
         lineChart.setStyle(".default-color0.chart-series-line { -fx-stroke: #MAGENTA; }");
-
 
 
         for (XYChart.Data<Double, Double> s : series.getData()) {
@@ -441,8 +418,7 @@ public class ModelOverviewController {
                 try {
                     // yes, using exception for control is a bad solution ;-)
                     Double.valueOf(stepField.getEditor().textProperty().get().replace(",", "."));
-                }
-                catch (NumberFormatException e) {
+                } catch (NumberFormatException e) {
 
                     // show message to user: "only numbers allowed"
 
@@ -500,20 +476,19 @@ public class ModelOverviewController {
 
     @FXML
     private void openAboutWindow(final ActionEvent event) {
-        Parent vbox;
-        try {
-            vbox = FXMLLoader.load(getClass().getClassLoader().getResource("/about.fxml"));
-            Stage stage = new Stage();
-            stage.setTitle("My New Stage Title");
-            stage.setScene(new Scene(vbox, 400, 300));
-            stage.show();
-            // Hide this current window (if this is what you want)
-            //((Node)(event.getSource())).getScene().getWindow().hide();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("О программе");
+        alert.setGraphic((Node) null);
+        alert.setHeaderText("                                            FLOWMODEL" + "\n" +
+                "Выполнили: студенты группы № 444: " +
+                "\n                                            Анпилова А.В., " +
+                "\n                                            Демьяненко А.В., \n" +
+                "                                            Сумин А.П. \n" +
+                        "Руководитель: кандидат технических наук, доцент кафедры САПРиУ СПбГТИ(ТУ) " +
+                "\n                                    Полосин Андрей Николаевич\n\n" +
+                        "                                            СПбГТИ(ТУ), 2017");
+        alert.showAndWait();
     }
-
 
 
     @FXML
