@@ -6,10 +6,7 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
@@ -18,21 +15,22 @@ import javafx.scene.control.*;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 import ru.alexsumin.Main;
 import ru.alexsumin.model.Data;
+import ru.alexsumin.model.IdTypePair;
 import ru.alexsumin.model.Result;
 import ru.alexsumin.util.ReportGenerator;
 
 import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
+import java.sql.*;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.function.UnaryOperator;
 
@@ -78,8 +76,6 @@ public class ModelOverviewController {
     private TableColumn<Result, Number> temperatureColumn;
     @FXML
     private TableColumn<Result, Number> viscosityColumn;
-    //    @FXML
-//    private TextField stepField;
     @FXML
     private Spinner stepField = new Spinner(new SpinnerValueFactory.DoubleSpinnerValueFactory(0.1, 10.6,
             Double.parseDouble(STEP_VALUE), 0.1));
@@ -101,8 +97,6 @@ public class ModelOverviewController {
     private Label timeCalculate;
     @FXML
     private VBox vbox;
-    @FXML
-    private ContextMenu table_context_menu, chart_context_menu;
     private FileChooser fileChooser = new FileChooser();
     private ReportGenerator report = new ReportGenerator();
     @FXML
@@ -116,17 +110,56 @@ public class ModelOverviewController {
     private Main main = new Main();
     private ObservableList<Result> results = FXCollections.observableArrayList();
     private boolean isAdmin = false;
+    ChoiceBox choiceBox;
 
 
     public ModelOverviewController() {
     }
 
 
-    @FXML
-    public void openMenu(final MouseEvent event) {
-        if (event.getButton() != MouseButton.SECONDARY) return;
-        chart_context_menu.show(vbox.getScene().getWindow(), event.getScreenX(), event.getScreenY());
+    private Connection connect() {
+        // SQLite connection string
+        String url = "jdbc:sqlite:/home/alex/5.s3db";
+        Connection conn = null;
+        try {
+            conn = DriverManager.getConnection(url);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return conn;
     }
+
+
+    private List<IdTypePair> getMaterialsFromDatabase() {
+        String material_type;
+        int id_material;
+
+        String sql = "SELECT id_material, material_type" +
+                "FROM Material";
+
+        List<IdTypePair> materials = new ArrayList<>();
+
+        try (Connection conn = this.connect();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+
+            // loop through the result set
+            while (rs.next()) {
+                material_type = rs.getString("material_type");
+                id_material = rs.getInt("id_material");
+                IdTypePair pair = new IdTypePair(id_material, material_type);
+                System.out.println(material_type);
+                materials.add(pair);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        System.out.println(materials);
+        return materials;
+    }
+
+
+
 
 
     @FXML
@@ -134,6 +167,10 @@ public class ModelOverviewController {
         stepField.setEditable(false);
         enterSpinner();
 
+
+        connect();
+        choiceBox = new ChoiceBox<>();
+        choiceBox.setItems(FXCollections.observableArrayList(getMaterialsFromDatabase()));
 
         FileChooser.ExtensionFilter filter1 = new FileChooser.ExtensionFilter("Документы Microsoft Office Word", "*.docx");
         FileChooser.ExtensionFilter filter3 = new FileChooser.ExtensionFilter("Файлы PNG", "*.png");
@@ -148,7 +185,6 @@ public class ModelOverviewController {
         tableWithResult.setItems(results);
 
 
-        initContextMenuChart();
 
         for (TextField tf : fields) {
             createDefenceFromStupid(tf);
@@ -197,31 +233,7 @@ public class ModelOverviewController {
         });
     }
 
-    private void initContextMenuChart() {
 
-        MenuItem save_chart = new MenuItem("Сохранить как изображение");
-        MenuItem clear_chart = new MenuItem("Очистить");
-
-        chart_context_menu = new ContextMenu(save_chart, clear_chart);
-
-        clear_chart.setOnAction(e -> {
-            temperChart.getData().clear();
-        });
-
-        save_chart.setOnAction(e -> {
-            File file = fileChooser.showSaveDialog(null);
-
-            if (file == null) return;
-
-            WritableImage image = temperChart.snapshot(new SnapshotParameters(), null);
-
-            try {
-                ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", file);
-            } catch (IOException ex) {
-                System.out.println("some error");
-            }
-        });
-    }
 
     @FXML
     private void initColumn() {
