@@ -46,21 +46,21 @@ public class Data {
     private double canalPerformance; // производительность канала
 
 
-    public Data(double[] input) {
-        this.lengthStep = input[0];
-        this.width = input[1];
-        this.length = input[2];
-        this.depth = input[3];
-        this.density = input[4];
-        this.capacity = input[5];
-        this.meltingTemperature = input[6];
-        this.coverSpeed = input[7];
-        this.coverTemperature = input[8];
-        this.consFactorWithReduction = input[13];
-        this.viscosityFactor = input[9];
-        this.reductionTemperature = input[10];
-        this.flowIndex = input[11];
-        this.emissionFactor = input[12];
+    public Data(double step, double[] input) {
+        this.lengthStep = step;
+        this.width = input[0];
+        this.length = input[1];
+        this.depth = input[2];
+        this.density = input[3];
+        this.capacity = input[4];
+        this.meltingTemperature = input[5];
+        this.coverSpeed = input[6];
+        this.coverTemperature = input[7];
+        this.viscosityFactor = input[8];
+        this.reductionTemperature = input[9];
+        this.flowIndex = input[10];
+        this.emissionFactor = input[11];
+        this.consFactorWithReduction = input[12];
     }
 
     public static double roundToTwoPlaces(double d) {

@@ -520,4 +520,16 @@
             <fx:reference source="consFactorWithReductionField" />
         </ArrayList>
     </fx:define>
+    <fx:define>
+        <ArrayList fx:id="fieldsMaterial">
+            <fx:reference source="densityField"/>
+            <fx:reference source="capacityField"/>
+            <fx:reference source="meltingTemperatureField"/>
+            <fx:reference source="viscosityFactorField"/>
+            <fx:reference source="reductionTemperatureField"/>
+            <fx:reference source="indexOfMaterialField"/>
+            <fx:reference source="emissionFactorField"/>
+            <fx:reference source="consFactorWithReductionField"/>
+        </ArrayList>
+    </fx:define>
 </VBox>

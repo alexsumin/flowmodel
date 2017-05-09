@@ -21,6 +21,7 @@ import javafx.stage.FileChooser;
 import ru.alexsumin.Main;
 import ru.alexsumin.model.Data;
 import ru.alexsumin.model.IdTypePair;
+import ru.alexsumin.model.Material;
 import ru.alexsumin.model.Result;
 import ru.alexsumin.util.ReportGenerator;
 
@@ -90,7 +91,7 @@ public class ModelOverviewController {
     @FXML
     private TextField performField, lastTemperField, lastViscField;
     @FXML
-    private ArrayList<TextField> fields;
+    private ArrayList<TextField> fields, fieldsMaterial;
     @FXML
     private Button calculateButton, reportButton;
     @FXML
@@ -170,8 +171,9 @@ public class ModelOverviewController {
         enterSpinner();
 
 
+        Material material = new Material();
 
-        connect();
+        //connect();
 
 
         //choiceBox.setItems(FXCollections.observableArrayList("1", "2", "3"));
@@ -180,7 +182,7 @@ public class ModelOverviewController {
 //                              Object oldValue, Object newValue) -> {
 //                    choiceBox.setText((String)newValue);
 //                });
-        choiceBox.setItems(FXCollections.observableArrayList(getMaterialsFromDatabase()));
+        choiceBox.setItems(FXCollections.observableArrayList(material.getMaterialsFromDatabase()));
         choiceBox.getSelectionModel().selectFirst();
 
         FileChooser.ExtensionFilter filter1 = new FileChooser.ExtensionFilter("Документы Microsoft Office Word", "*.docx");
@@ -257,17 +259,17 @@ public class ModelOverviewController {
     public void calculate(final ActionEvent event) {
         long startTime = System.currentTimeMillis();
 
-        double usersData[] = new double[fields.size() + 1];
-        usersData[0] = Double.valueOf(stepField.getEditor().getText().replace(",", "."));
+        double usersData[] = new double[fields.size()];
+        double step = Double.valueOf(stepField.getEditor().getText().replace(",", "."));
 
-        for (int i = 0; i < usersData.length - 1; i++) {
-            usersData[i + 1] = Double.parseDouble(fields.get(i).getText());
+        for (int i = 0; i < usersData.length; i++) {
+            usersData[i] = Double.parseDouble(fields.get(i).getText());
             System.out.println(usersData[i]);
 
         }
 
 
-        dt = new Data(usersData);
+        dt = new Data(step, usersData);
         results = FXCollections.observableArrayList(dt.getResults());
         tableWithResult.setItems(results);
         performField.setText(String.valueOf((int) dt.getCanalPerformance()));
