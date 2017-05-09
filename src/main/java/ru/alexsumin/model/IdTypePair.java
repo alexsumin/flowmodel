@@ -9,14 +9,15 @@ public class IdTypePair {
     private String type;
 
     public IdTypePair(int id, String type) {
-        this.id = this.id;
-        this.type = this.type;
+        this.id = id;
+        this.type = type;
     }
 
     public int getId() {
         return id;
     }
 
+    @Override
     public String toString() {
         return type;
     }

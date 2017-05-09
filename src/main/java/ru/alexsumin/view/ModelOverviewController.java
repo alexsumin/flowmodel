@@ -110,7 +110,8 @@ public class ModelOverviewController {
     private Main main = new Main();
     private ObservableList<Result> results = FXCollections.observableArrayList();
     private boolean isAdmin = false;
-    ChoiceBox choiceBox;
+    @FXML
+    private ChoiceBox choiceBox = new ChoiceBox<>();
 
 
     public ModelOverviewController() {
@@ -134,8 +135,7 @@ public class ModelOverviewController {
         String material_type;
         int id_material;
 
-        String sql = "SELECT id_material, material_type" +
-                "FROM Material";
+        String sql = "SELECT id_material, material_type FROM Material";
 
         List<IdTypePair> materials = new ArrayList<>();
 
@@ -148,13 +148,15 @@ public class ModelOverviewController {
                 material_type = rs.getString("material_type");
                 id_material = rs.getInt("id_material");
                 IdTypePair pair = new IdTypePair(id_material, material_type);
-                System.out.println(material_type);
+//                System.out.println(material_type);
+//                System.out.println(id_material);
+//                System.out.println(pair);
                 materials.add(pair);
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        System.out.println(materials);
+//        System.out.println(materials);
         return materials;
     }
 
@@ -168,9 +170,18 @@ public class ModelOverviewController {
         enterSpinner();
 
 
+
         connect();
-        choiceBox = new ChoiceBox<>();
+
+
+        //choiceBox.setItems(FXCollections.observableArrayList("1", "2", "3"));
+//        choiceBox.getSelectionModel().selectedItemProperty()
+//                .addListener((ObservableValue observable,
+//                              Object oldValue, Object newValue) -> {
+//                    choiceBox.setText((String)newValue);
+//                });
         choiceBox.setItems(FXCollections.observableArrayList(getMaterialsFromDatabase()));
+        choiceBox.getSelectionModel().selectFirst();
 
         FileChooser.ExtensionFilter filter1 = new FileChooser.ExtensionFilter("Документы Microsoft Office Word", "*.docx");
         FileChooser.ExtensionFilter filter3 = new FileChooser.ExtensionFilter("Файлы PNG", "*.png");
