@@ -1,7 +1,5 @@
 package ru.alexsumin.view;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
@@ -30,10 +28,8 @@ import ru.alexsumin.util.ReportGenerator;
 import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
-import java.sql.*;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 import java.util.function.UnaryOperator;
 
@@ -42,7 +38,6 @@ import java.util.function.UnaryOperator;
  */
 public class ModelOverviewController {
     static final String STEP_VALUE = "0.1";
-    public WritableImage imageFirstChart, imageSecondChart;
     @FXML
     TableView<Result> tableWithResult;
 
@@ -114,58 +109,12 @@ public class ModelOverviewController {
     private ObservableList<Result> results = FXCollections.observableArrayList();
     private boolean isAdmin = false;
     @FXML
-    private ChoiceBox choiceBox = new ChoiceBox<>();
+    private ChoiceBox<IdTypePair> choiceBox = new ChoiceBox<>();
     double[] dataMaterial = new double[8];
 
 
     public ModelOverviewController() {
     }
-
-
-    private Connection connect() {
-        // SQLite connection string
-        String url = "jdbc:sqlite:/home/alex/5.s3db";
-        Connection conn = null;
-        try {
-            conn = DriverManager.getConnection(url);
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-        return conn;
-    }
-
-
-    private List<IdTypePair> getMaterialsFromDatabase() {
-        String material_type;
-        int id_material;
-
-        String sql = "SELECT id_material, material_type FROM Material";
-
-        List<IdTypePair> materials = new ArrayList<>();
-
-        try (Connection conn = this.connect();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-
-            // loop through the result set
-            while (rs.next()) {
-                material_type = rs.getString("material_type");
-                id_material = rs.getInt("id_material");
-                IdTypePair pair = new IdTypePair(id_material, material_type);
-//                System.out.println(material_type);
-//                System.out.println(id_material);
-//                System.out.println(pair);
-                materials.add(pair);
-            }
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-//        System.out.println(materials);
-        return materials;
-    }
-
-
-
 
 
     @FXML
@@ -177,23 +126,18 @@ public class ModelOverviewController {
 
         Material material = new Material();
 
-        //connect();
+
 
 
         choiceBox.setItems(FXCollections.observableArrayList(material.getMaterialsFromDatabase()));
         choiceBox.getSelectionModel().selectFirst();
 
 
-        int idMaterial;
-        choiceBox.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                choiceBox.getSelectionModel().select(newValue);
-                Number id = newValue;
-                material.setIdMaterial((int) id);
-                dataMaterial = material.getMaterialData();
-                updateData();
-            }
+        choiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            choiceBox.getSelectionModel().select(newValue);
+            material.setIdMaterial(choiceBox.getValue().getId());
+            dataMaterial = material.getMaterialData();
+            updateData();
         });
 
 

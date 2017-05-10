@@ -51,7 +51,7 @@ public class Material {
                 id_material = rs.getInt("id_material");
                 IdTypePair pair = new IdTypePair(id_material, material_type);
 //                System.out.println(material_type);
-//                System.out.println(idMaterial);
+                System.out.println(id_material);
 //                System.out.println(pair);
                 materials.add(pair);
             }
@@ -63,7 +63,7 @@ public class Material {
     }
 
 
-    public double selectDensity() {
+    private double selectDensity() {
         String sql1 = "SELECT [MaterialObjCharact].charact_value\n" +
                 "FROM (MaterialObjCharact INNER JOIN Material ON MaterialObjCharact.id_material = Material.id_material) INNER JOIN ObjCharact ON MaterialObjCharact.id_charact = ObjCharact.id_charact\n" +
                 "WHERE ObjCharact.id_charact = 1 AND Material.id_material = " + idMaterial + ";";
@@ -83,7 +83,7 @@ public class Material {
         return density;
     }
 
-    public double selectCapacity() {
+    private double selectCapacity() {
         String sql2 = "SELECT [MaterialObjCharact].charact_value\n" +
                 "FROM (MaterialObjCharact INNER JOIN Material ON MaterialObjCharact.id_material = Material.id_material) INNER JOIN ObjCharact ON MaterialObjCharact.id_charact = ObjCharact.id_charact\n" +
                 "WHERE ObjCharact.id_charact = 2 AND Material.id_material = " + idMaterial + ";";
@@ -103,7 +103,7 @@ public class Material {
         return capacity;
     }
 
-    public double selectMeltingTemperature() {
+    private double selectMeltingTemperature() {
         String sql3 = "SELECT [MaterialObjCharact].charact_value\n" +
                 "FROM (MaterialObjCharact INNER JOIN Material ON MaterialObjCharact.id_material = Material.id_material) INNER JOIN ObjCharact ON MaterialObjCharact.id_charact = ObjCharact.id_charact\n" +
                 "WHERE ObjCharact.id_charact = 3 AND Material.id_material = " + idMaterial + ";";
@@ -123,7 +123,7 @@ public class Material {
         return meltingTemperature;
     }
 
-    public double selectConsFactorWithReduction() {
+    private double selectConsFactorWithReduction() {
         String sql4 = "SELECT [MaterialObjCharact].charact_value\n" +
                 "FROM (MaterialObjCharact INNER JOIN Material ON MaterialObjCharact.id_material = Material.id_material) INNER JOIN ObjCharact ON MaterialObjCharact.id_charact = ObjCharact.id_charact\n" +
                 "WHERE ObjCharact.id_charact = 4 AND Material.id_material = " + idMaterial + ";";
@@ -143,7 +143,7 @@ public class Material {
         return consFactorWithReduction;
     }
 
-    public double selectViscosityFactor() {
+    private double selectViscosityFactor() {
         String sql5 = "SELECT [MaterialObjCharact].charact_value\n" +
                 "FROM (MaterialObjCharact INNER JOIN Material ON MaterialObjCharact.id_material = Material.id_material) INNER JOIN ObjCharact ON MaterialObjCharact.id_charact = ObjCharact.id_charact\n" +
                 "WHERE ObjCharact.id_charact = 5 AND Material.id_material = " + idMaterial + ";";
@@ -163,7 +163,7 @@ public class Material {
         return viscosityFactor;
     }
 
-    public double selectReductionTemperature() {
+    private double selectReductionTemperature() {
         String sql6 = "SELECT [MaterialObjCharact].charact_value\n" +
                 "FROM (MaterialObjCharact INNER JOIN Material ON MaterialObjCharact.id_material = Material.id_material) INNER JOIN ObjCharact ON MaterialObjCharact.id_charact = ObjCharact.id_charact\n" +
                 "WHERE ObjCharact.id_charact = 6 AND Material.id_material = " + idMaterial + ";";
@@ -183,7 +183,7 @@ public class Material {
         return reductionTemperature;
     }
 
-    public double selectFlowIndex() {
+    private double selectFlowIndex() {
         String sql7 = "SELECT [MaterialObjCharact].charact_value\n" +
                 "FROM (MaterialObjCharact INNER JOIN Material ON MaterialObjCharact.id_material = Material.id_material) INNER JOIN ObjCharact ON MaterialObjCharact.id_charact = ObjCharact.id_charact\n" +
                 "WHERE ObjCharact.id_charact = 7 AND Material.id_material = " + idMaterial + ";";
@@ -203,7 +203,7 @@ public class Material {
         return flowIndex;
     }
 
-    public double selectEmissionFactor() {
+    private double selectEmissionFactor() {
         String sql8 = "SELECT [MaterialObjCharact].charact_value\n" +
                 "FROM (MaterialObjCharact INNER JOIN Material ON MaterialObjCharact.id_material = Material.id_material) INNER JOIN ObjCharact ON MaterialObjCharact.id_charact = ObjCharact.id_charact\n" +
                 "WHERE ObjCharact.id_charact = 8 AND Material.id_material = " + idMaterial + ";";
