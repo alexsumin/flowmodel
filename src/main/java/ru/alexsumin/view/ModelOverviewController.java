@@ -1,5 +1,7 @@
 package ru.alexsumin.view;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
@@ -113,6 +115,7 @@ public class ModelOverviewController {
     private boolean isAdmin = false;
     @FXML
     private ChoiceBox choiceBox = new ChoiceBox<>();
+    double[] dataMaterial = new double[8];
 
 
     public ModelOverviewController() {
@@ -171,19 +174,28 @@ public class ModelOverviewController {
         enterSpinner();
 
 
+
         Material material = new Material();
 
         //connect();
 
 
-        //choiceBox.setItems(FXCollections.observableArrayList("1", "2", "3"));
-//        choiceBox.getSelectionModel().selectedItemProperty()
-//                .addListener((ObservableValue observable,
-//                              Object oldValue, Object newValue) -> {
-//                    choiceBox.setText((String)newValue);
-//                });
         choiceBox.setItems(FXCollections.observableArrayList(material.getMaterialsFromDatabase()));
         choiceBox.getSelectionModel().selectFirst();
+
+
+        int idMaterial;
+        choiceBox.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                choiceBox.getSelectionModel().select(newValue);
+                Number id = newValue;
+                material.setIdMaterial((int) id);
+                dataMaterial = material.getMaterialData();
+                updateData();
+            }
+        });
+
 
         FileChooser.ExtensionFilter filter1 = new FileChooser.ExtensionFilter("Документы Microsoft Office Word", "*.docx");
         FileChooser.ExtensionFilter filter3 = new FileChooser.ExtensionFilter("Файлы PNG", "*.png");
@@ -226,6 +238,12 @@ public class ModelOverviewController {
         }
 
 
+    }
+
+    private void updateData() {
+        for (int i = 0; i < fieldsMaterial.size(); i++) {
+            fieldsMaterial.get(i).setText(String.valueOf(dataMaterial[i]));
+        }
     }
 
 
