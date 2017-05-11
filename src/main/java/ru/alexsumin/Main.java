@@ -12,6 +12,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.Optional;
 
 /**
@@ -129,6 +130,21 @@ public class Main extends Application {
         }
 
         return false;
+    }
+
+
+    public void showDatabaseEditDialog(Stage primaryStage) {
+        try {
+
+            Parent root = FXMLLoader.load(getClass().getResource("/view/EditorDb.fxml"));
+            primaryStage.setTitle("Редактирование базы данных");
+            primaryStage.setScene(new Scene(root, 800, 600));
+            primaryStage.show();
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
 

@@ -18,6 +18,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import ru.alexsumin.Main;
 import ru.alexsumin.model.Data;
 import ru.alexsumin.model.IdTypePair;
@@ -41,7 +42,7 @@ public class ModelOverviewController {
     @FXML
     TableView<Result> tableWithResult;
 
-    UnaryOperator<TextFormatter.Change> filter = t -> {
+    static UnaryOperator<TextFormatter.Change> filter = t -> {
         DecimalFormatSymbols decimal = new DecimalFormatSymbols(Locale.getDefault());
         String sep = String.valueOf(decimal.getDecimalSeparator());
 
@@ -191,7 +192,7 @@ public class ModelOverviewController {
     }
 
 
-    private void createDefenceFromStupid(TextField textField) {
+    static void createDefenceFromStupid(TextField textField) {
         textField.setTextFormatter(new TextFormatter<>(filter));
         textField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.isEmpty() || (newValue.equals("0.0")) || (newValue.equals("0")) || (newValue.equals("0."))) {
@@ -481,6 +482,11 @@ public class ModelOverviewController {
     @FXML
     private void exitProgram(final ActionEvent e) {
         System.exit(0);
+    }
+
+    @FXML
+    private void openEditor(final ActionEvent event) {
+        main.showDatabaseEditDialog(new Stage());
     }
 
 
