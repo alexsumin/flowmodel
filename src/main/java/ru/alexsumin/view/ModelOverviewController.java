@@ -352,6 +352,7 @@ public class ModelOverviewController {
                 report.setValues(dt.getValues());
                 report.setListOfResults(results);
                 report.setPics(namePic1, namePic2);
+                report.setType(choiceBox.getValue().toString());
                 report.create(file);
 
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -454,11 +455,11 @@ public class ModelOverviewController {
 
             alert.showAndWait();
 
-            return;
+            //return;
 
         }
 
-        //initialize();
+        initialize();
 
     }
 

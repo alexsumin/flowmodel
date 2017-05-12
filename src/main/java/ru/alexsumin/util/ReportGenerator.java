@@ -23,7 +23,11 @@ public class ReportGenerator {
     private File file;
     private String pic1;
     private String pic2;
+    private String type;
 
+    public void setType(String type) {
+        this.type = type;
+    }
 
     ReportGenerator(List values, List results, long time) {
         this.values = values;
@@ -93,7 +97,7 @@ public class ReportGenerator {
             paragraphConfig2.setText("Входные данные:");
             paragraphConfig2.addBreak();
 
-            paragraphConfig2.setText("Тип материала: Полипропилен");
+            paragraphConfig2.setText("Тип материала: " + type);
             paragraphConfig2.addBreak();
             paragraphConfig2.setText("1 Геометрические параметры канала");
             paragraphConfig2.addBreak();

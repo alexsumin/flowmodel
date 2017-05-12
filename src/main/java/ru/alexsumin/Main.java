@@ -51,6 +51,7 @@ public class Main extends Application {
         primaryStage.show();
     }
 
+
     public boolean openLoginDialog() {
 
         Dialog<LoginData> dialog = new Dialog<>();
@@ -60,7 +61,10 @@ public class Main extends Application {
 
         ButtonType loginButtonType = new ButtonType("Login", ButtonBar.ButtonData.OK_DONE);
 
-        dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, ButtonType.CANCEL);
+        dialog.getDialogPane().getButtonTypes().addAll(loginButtonType);
+        //dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, ButtonType.CANCEL);
+
+
 
 
         GridPane grid = new GridPane();
@@ -128,6 +132,7 @@ public class Main extends Application {
             isAdmin = true;
             return true;
         }
+
 
         return false;
     }
