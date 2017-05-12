@@ -21,9 +21,9 @@ import java.util.Optional;
 public class Main extends Application {
 
     private final String USER_PASSWORD = "password";
-    private boolean isAdmin;
+    private static boolean isAdmin;
 
-    public boolean isAdmin() {
+    public static boolean isAdmin() {
         return isAdmin;
     }
 

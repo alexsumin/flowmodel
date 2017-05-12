@@ -91,7 +91,7 @@ public class ModelOverviewController {
     @FXML
     private ArrayList<TextField> fields, fieldsMaterial;
     @FXML
-    private Button calculateButton, reportButton;
+    private Button calculateButton, reportButton, editButton;
     @FXML
     private Label timeCalculate;
     @FXML
@@ -108,7 +108,7 @@ public class ModelOverviewController {
     private Data dt;
     private Main main = new Main();
     private ObservableList<Result> results = FXCollections.observableArrayList();
-    private boolean isAdmin = false;
+    //private boolean isAdmin = false;
     @FXML
     private ChoiceBox<IdTypePair> choiceBox = new ChoiceBox<>();
     double[] dataMaterial = new double[8];
@@ -177,8 +177,8 @@ public class ModelOverviewController {
         viscosityChart.getYAxis().setLabel("Вязкость, Па∙с");
 
         //TODO: ChoiceBox с типом материала, кнопки удалить, добавить, сохранить
-        isAdmin = main.isAdmin();
-        if (isAdmin) {
+
+        if (Main.isAdmin()) {
 
         }
 
@@ -458,7 +458,7 @@ public class ModelOverviewController {
 
         }
 
-        initialize();
+        //initialize();
 
     }
 
@@ -486,7 +486,17 @@ public class ModelOverviewController {
 
     @FXML
     private void openEditor(final ActionEvent event) {
-        main.showDatabaseEditDialog(new Stage());
+        if (main.isAdmin()) {
+            main.showDatabaseEditDialog(new Stage());
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Ошибка");
+            alert.setHeaderText("Недостаточно прав");
+            alert.setContentText("Доступно только администратору!");
+
+            alert.showAndWait();
+
+        }
     }
 
 
