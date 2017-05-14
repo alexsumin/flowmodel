@@ -459,7 +459,7 @@ public class ModelOverviewController {
 
         }
 
-        initialize();
+//        initialize();
 
     }
 

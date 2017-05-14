@@ -7,6 +7,8 @@ import java.util.List;
 /**
  * Created by alex on 10.05.17.
  */
+
+
 public class Material {
 
 
@@ -34,8 +36,8 @@ public class Material {
 
 
     public List<IdTypePair> getMaterialsFromDatabase() {
-        String material_type;
-        int id_material;
+        String materialType;
+
 
         String sql = "SELECT id_material, material_type FROM Material";
 
@@ -47,11 +49,11 @@ public class Material {
 
             // loop through the result set
             while (rs.next()) {
-                material_type = rs.getString("material_type");
-                id_material = rs.getInt("id_material");
-                IdTypePair pair = new IdTypePair(id_material, material_type);
-//                System.out.println(material_type);
-                System.out.println(id_material);
+                materialType = rs.getString("material_type");
+                idMaterial = rs.getInt("id_material");
+                IdTypePair pair = new IdTypePair(idMaterial, materialType);
+//                System.out.println(materialType);
+                System.out.println(idMaterial);
 //                System.out.println(pair);
                 materials.add(pair);
             }
@@ -238,3 +240,4 @@ public class Material {
     }
 
 }
+

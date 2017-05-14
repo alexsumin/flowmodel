@@ -6,6 +6,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import ru.alexsumin.model.ChangeMaterial;
 import ru.alexsumin.model.IdTypePair;
 import ru.alexsumin.model.Material;
 
@@ -22,7 +23,7 @@ public class EditorDbController {
     @FXML
     private ChoiceBox<IdTypePair> choiceBox = new ChoiceBox<>();
     @FXML
-    private TextField densityField, capacityField, meltingTemperatureField;
+    private TextField typeField, densityField, capacityField, meltingTemperatureField;
     @FXML
     private TextField consFactorWithReductionField, viscosityFactorField, reductionTemperatureField, indexOfMaterialField, emissionFactorField;
     double[] dataMaterial = new double[8];
@@ -31,6 +32,10 @@ public class EditorDbController {
     static final IdTypePair ADDNEW = new IdTypePair(-1, "Новая запись");
 
     private Stage editDatabaseStage;
+
+    private String type;
+    ChangeMaterial changer;
+    Material material;
 
     public EditorDbController() {
 
@@ -43,7 +48,9 @@ public class EditorDbController {
     @FXML
     private void initialize() {
 
-        Material material = new Material();
+        changer = new ChangeMaterial();
+
+        material = new Material();
 
 //        for (TextField tf : fieldsMaterial) {
 //            ModelOverviewController.createDefenceFromStupid(tf);
@@ -62,12 +69,12 @@ public class EditorDbController {
         choiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             choiceBox.getSelectionModel().select(newValue);
             if (choiceBox.getValue() == ADDNEW) {
-                System.out.println("что-то происходит вообще?");
-                clearData();
+                createNewEntry();
 
             } else {
                 material.setIdMaterial(choiceBox.getValue().getId());
                 dataMaterial = material.getMaterialData();
+                typeField.setText(choiceBox.getValue().toString());
                 updateData();
             }
 
@@ -87,17 +94,34 @@ public class EditorDbController {
         for (TextField tf : fieldsMaterial) {
             tf.setText("0");
         }
+        typeField.setText("");
 
     }
 
     @FXML
     private void createNewEntry() {
-
+        clearData();
+        typeField.setText("Введите тип материала");
 
     }
 
     @FXML
     private void updateEntry() {
+        type = typeField.getText();
+        System.out.println(type);
+        int id = choiceBox.getValue().getId();
+        System.out.println(id);
+
+        for (int i = 0; i < dataMaterial.length; i++) {
+            dataMaterial[i] = Double.parseDouble(fieldsMaterial.get(i).getText());
+            System.out.println(dataMaterial[i]);
+
+        }
+
+
+        changer.setData(type, id, dataMaterial);
+
+        changer.updateDbRecords();
 
     }
 
