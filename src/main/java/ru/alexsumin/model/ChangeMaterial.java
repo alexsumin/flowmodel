@@ -19,14 +19,8 @@ public class ChangeMaterial {
         connect();
     }
 
-    public void setIdMaterial(int index) {
-        switch (index) {
-            case 0:
-                getIdMaterialFromDatabase();
-                break;
-            case 1:
-                getMaxIdMaterialFromDatabase();
-        }
+    public void setIdMaterial(int id) {
+        id_material = id;
     }
 
 
@@ -143,7 +137,7 @@ public class ChangeMaterial {
     }
 
 
-    private int getMaxIdMaterialFromDatabase() {
+    public int getMaxIdMaterialFromDatabase() {
         String maxIdSql = "SELECT MAX(id_material) FROM Material;";
 
         try (Connection maxIdConn = this.connect();
@@ -158,7 +152,7 @@ public class ChangeMaterial {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        return id_material++;
+        return ++id_material;
     }
 
 
@@ -198,8 +192,8 @@ public class ChangeMaterial {
         }
     }
 
-    private void insertDbRecords() {
-        setIdMaterial(1);
+    public void insertDbRecords() {
+        //setIdMaterial(1);
         insertMaterial();
         insertCharactValues();
     }
@@ -422,12 +416,10 @@ public class ChangeMaterial {
         }
     }
 
-//    private void deleteDbRecords() {
-//        setMaterialType();
-//        setIdMaterial(0);
-//        deleteCharactValues();
-//        deleteMaterial();
-//    }
+    public void deleteDbRecords() {
+        deleteCharactValues();
+        deleteMaterial();
+    }
 
 
 }

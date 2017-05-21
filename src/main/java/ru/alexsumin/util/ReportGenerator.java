@@ -64,7 +64,6 @@ public class ReportGenerator {
     }
 
 
-    //TODO: раз два три
     public void setTime(long time) {
         this.time = time;
     }

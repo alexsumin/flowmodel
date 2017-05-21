@@ -241,7 +241,8 @@
                                 <Insets left="10.0"/>
                             </GridPane.margin>
                         </Button>
-                        <Button fx:id="deleteButton" mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0"
+                        <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#deleteEntry" prefHeight="30.0"
+                                prefWidth="100.0"
                                 text="Удалить" GridPane.rowIndex="6">
                             <GridPane.margin>
                                 <Insets left="130.0"/>
