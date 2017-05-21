@@ -111,6 +111,12 @@ public class EditorDbController {
         clearData();
         typeField.setText("Введите тип материала");
 
+        for (int i = 0; i < dataMaterial.length; i++) {
+            dataMaterial[i] = Double.parseDouble(fieldsMaterial.get(i).getText());
+            System.out.println(dataMaterial[i]);
+
+        }
+
 
     }
 
