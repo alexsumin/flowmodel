@@ -63,6 +63,8 @@ public class ReportGenerator {
         this.listOfResults = listOfResults;
     }
 
+
+    //TODO: раз два три
     public void setTime(long time) {
         this.time = time;
     }
@@ -85,7 +87,7 @@ public class ReportGenerator {
             paragraphConfig.setColor("000000");
             paragraphConfig.setFontSize(14);
             paragraphConfig.setFontFamily("Times New Roman");
-            paragraphConfig.setText("Отчёт об исследовании");
+            paragraphConfig.setText("Отчёт о моделировании");
             paragraphConfig.addBreak();
 
             XWPFParagraph bodyParagraph2 = docxModel.createParagraph();
@@ -144,7 +146,7 @@ public class ReportGenerator {
             paragraphConfig2.setText("4.4 Индекс течения материала n = " + values.get(11));
             paragraphConfig2.addBreak();
             paragraphConfig2.addTab();
-            paragraphConfig2.setText("4.5 Коэффициент теплоотдачи от крышки канала к материалу αu = " + values.get(12) + " Вт/(м²∙°C)");
+            paragraphConfig2.setText("4.5 Коэффициент теплоотдачи от крышки канала к материалу αᵤ = " + values.get(12) + " Вт/(м²∙°C)");
             paragraphConfig2.addBreak();
             paragraphConfig2.addBreak();
             paragraphConfig2.setText("Выходные параметры:");

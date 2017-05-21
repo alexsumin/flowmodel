@@ -36,6 +36,7 @@ public class EditorDbController {
     private String type;
     ChangeMaterial changer;
     Material material;
+    boolean isNewExist = false;
 
     public EditorDbController() {
 
@@ -58,18 +59,25 @@ public class EditorDbController {
 //        }
 
 
-        choiceBox.setItems(FXCollections.observableArrayList(material.getMaterialsFromDatabase()));
+        isNewExist = false;
+        replaceChoiceBox();
 
-        boolean isNewExist = false;
-        if (!isNewExist) {
+//        choiceBox.setItems(FXCollections.observableArrayList(material.getMaterialsFromDatabase()));
+//        boolean isNewExist = false;
+//        if (!isNewExist) {
+//
+//            choiceBox.getItems().add(ADDNEW);
+//            isNewExist = true;
+//        }
 
-            choiceBox.getItems().add(ADDNEW);
-        }
 
         choiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             choiceBox.getSelectionModel().select(newValue);
             if (choiceBox.getValue() == ADDNEW) {
                 createNewEntry();
+
+            }
+            if (choiceBox.getValue() == null) {
 
             } else {
                 material.setIdMaterial(choiceBox.getValue().getId());
@@ -92,7 +100,7 @@ public class EditorDbController {
 
     private void clearData() {
         for (TextField tf : fieldsMaterial) {
-            tf.setText("0");
+            tf.setText("");
         }
         typeField.setText("");
 
@@ -102,6 +110,20 @@ public class EditorDbController {
     private void createNewEntry() {
         clearData();
         typeField.setText("Введите тип материала");
+
+
+    }
+
+    private void updateChoiceBox() {
+        choiceBox.setItems(null);
+        choiceBox.setItems(FXCollections.observableArrayList(material.getMaterialsFromDatabase()));
+
+        if (!isNewExist) {
+
+            choiceBox.getItems().add(ADDNEW);
+            isNewExist = true;
+        }
+
 
     }
 
@@ -123,11 +145,32 @@ public class EditorDbController {
 
         changer.updateDbRecords();
 
+
+        replaceChoiceBox();
+        clearData();
+
+
     }
+
 
     @FXML
     private void deleteEntry() {
 
+        //updateChoiceBox();
+
+    }
+
+
+    private void replaceChoiceBox() {
+        choiceBox.getItems().clear();
+        material = new Material();
+
+        choiceBox.setItems(FXCollections.observableArrayList(material.getMaterialsFromDatabase()));
+        if (!isNewExist) {
+
+            choiceBox.getItems().add(ADDNEW);
+            isNewExist = true;
+        }
     }
 
 }

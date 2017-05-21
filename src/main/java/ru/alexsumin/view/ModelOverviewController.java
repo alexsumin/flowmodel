@@ -112,11 +112,15 @@ public class ModelOverviewController {
     @FXML
     private ChoiceBox<IdTypePair> choiceBox = new ChoiceBox<>();
     double[] dataMaterial = new double[8];
+    Material material;
 
 
     public ModelOverviewController() {
     }
 
+    public void refreshChoiceBox() {
+        choiceBox.setItems(FXCollections.observableArrayList(material.getMaterialsFromDatabase()));
+    }
 
     @FXML
     private void initialize() {
@@ -124,13 +128,12 @@ public class ModelOverviewController {
         enterSpinner();
 
 
+        material = new Material();
 
-        Material material = new Material();
+        refreshChoiceBox();
 
 
 
-
-        choiceBox.setItems(FXCollections.observableArrayList(material.getMaterialsFromDatabase()));
         choiceBox.getSelectionModel().selectFirst();
 
 
@@ -162,7 +165,7 @@ public class ModelOverviewController {
         }
 
         //createDefenceFromStupid(stepField, Double.parseDouble(lengthField.getText()));
-        stepField.setTooltip(new Tooltip("Введите величину не большую " + Double.parseDouble(lengthField.getText())));
+        stepField.setTooltip(new Tooltip("Введите величину, не большую " + Double.parseDouble(lengthField.getText())));
         timeCalculate.setVisible(false);
 
         calculateButton.setTooltip(new Tooltip("Нажмите, чтобы произвести расчёт"));
@@ -176,7 +179,6 @@ public class ModelOverviewController {
         viscosityChart.getXAxis().setLabel("Координата по длине канала, м");
         viscosityChart.getYAxis().setLabel("Вязкость, Па∙с");
 
-        //TODO: ChoiceBox с типом материала, кнопки удалить, добавить, сохранить
 
         if (Main.isAdmin()) {
 

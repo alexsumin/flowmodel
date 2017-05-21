@@ -2,7 +2,6 @@ package ru.alexsumin.model;
 
 
 import java.sql.*;
-import java.util.Arrays;
 
 /**
  * Created by Anton on 14.05.17.
@@ -113,22 +112,7 @@ public class ChangeMaterial {
         material_type = s;
     }
 
-    public double[] ChangeMaterialData() {
 
-        data[0] = newDensity;
-        data[1] = newCapacity;
-        data[2] = newMeltingTemperature;
-        data[3] = newViscosityFactor;
-        data[4] = newReductionTemperature;
-        data[5] = newFlowIndex;
-        data[6] = newEmissionFactor;
-        data[7] = newConsFactorWithReduction;
-        /*for (int i = 0; i < data.length; i++) {
-            System.out.println(data[i]);
-        }*/
-        System.out.println(Arrays.toString(data));
-        return data;
-    }
 
     public void setData(String type, int id, double[] data) {
         newDensity = data[0];
@@ -141,7 +125,7 @@ public class ChangeMaterial {
         newConsFactorWithReduction = data[7];
         material_type = type;
         id_material = id;
-        ChangeMaterialData();
+
 
 
     }
@@ -177,6 +161,9 @@ public class ChangeMaterial {
         return id_material++;
     }
 
+
+    //вставка значений
+
     private void insertMaterial() {
         String upSql = "INSERT INTO Material (id_material, material_type)\n" +
                 "VALUES (" + id_material + ", '" + material_type + "');";
@@ -199,7 +186,7 @@ public class ChangeMaterial {
                 "(" + id_material + ", 3, " + newMeltingTemperature + "), (" + id_material + ", 4, " + newConsFactorWithReduction + "),\n" +
                 "(" + id_material + ", 5, " + newViscosityFactor + "), (" + id_material + ", 6, " + newReductionTemperature + "),\n" +
                 "(" + id_material + ", 7, " + newFlowIndex + "), (" + id_material + ", 8, " + newEmissionFactor + ");";
-        ChangeMaterialData();
+
         try (Connection upConn1 = this.connect();
              Statement upStmt1 = upConn1.createStatement();
              ResultSet upRs1 = upStmt1.executeQuery(upSql1)) {
@@ -369,9 +356,10 @@ public class ChangeMaterial {
     }
 
     public void updateDbRecords() {
+        System.out.println(material_type);
         updateMaterial();
         updateCharactValues();
-        ChangeMaterialData();
+
     }
 
 
