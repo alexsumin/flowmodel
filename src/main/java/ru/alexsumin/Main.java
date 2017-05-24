@@ -12,7 +12,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
-import java.io.IOException;
+import java.io.*;
 import java.util.Optional;
 
 /**
@@ -20,7 +20,8 @@ import java.util.Optional;
  */
 public class Main extends Application {
 
-    private final String USER_PASSWORD = "password";
+
+    public static String USER_PASSWORD = "password";
     private static boolean isAdmin;
 
     public static boolean isAdmin() {
@@ -34,6 +35,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
+        readPassword();
         if (!openLoginDialog()) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Ошибка");
@@ -63,8 +65,6 @@ public class Main extends Application {
 
         dialog.getDialogPane().getButtonTypes().addAll(loginButtonType);
         //dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, ButtonType.CANCEL);
-
-
 
 
         GridPane grid = new GridPane();
@@ -151,7 +151,36 @@ public class Main extends Application {
             e.printStackTrace();
         }
     }
+
+    private void readPassword() {
+        File file = new File("src/main/resources/", "config");
+        try {
+            try (BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/config"))) {
+                USER_PASSWORD = reader.readLine();
+            }
+        } catch (IOException e) {
+            USER_PASSWORD = "password";
+            try {
+                try (BufferedWriter writer = new BufferedWriter(new FileWriter("src/main/resources/config"))) {
+                    try {
+                        writer.write(USER_PASSWORD);
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
+        ;
+
+    }
+
 }
+
+
+
+
 
 class LoginData {
     public String login;

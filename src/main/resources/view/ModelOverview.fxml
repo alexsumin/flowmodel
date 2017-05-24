@@ -14,7 +14,6 @@
             <menus>
                 <Menu mnemonicParsing="false" text="Главное меню">
                     <items>
-                        <MenuItem mnemonicParsing="false" onAction="#openEditor" text="Редактировать БД"/>
                         <MenuItem mnemonicParsing="false" onAction="#calculate" text="Выполнить расчёт"/>
                         <MenuItem mnemonicParsing="false" onAction="#generateReport" text="Сгенерировать отчёт"/>
                         <MenuItem mnemonicParsing="false" onAction="#openAboutWindow" text="О программе"/>
