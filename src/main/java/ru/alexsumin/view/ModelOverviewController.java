@@ -456,33 +456,26 @@ public class ModelOverviewController {
     @FXML
     private void openChangeUserDialog(final ActionEvent e) {
         if (!main.openLoginDialog()) {
-
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Ошибка");
             alert.setHeaderText("Ошибка авторизации!");
             alert.setContentText("Вы ввели неверные данные пользователя!");
-
             alert.showAndWait();
-
-
-
         }
 
-        try {
-            main.initScene(stage);
-            prevStage.close();
-        } catch (IOException e1) {
-            e1.printStackTrace();
+        if (Main.isAdmin()) {
+
+            try {
+                main.initScene(new Stage());
+                prevStage.close();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+
         }
 
 
     }
-
-//    @FXML
-//    private void CloseAction(ActionEvent event) {
-//        Stage stage = (Stage) close.getScene().getWindow();
-//        stage.close();
-//    }
 
 
     @FXML

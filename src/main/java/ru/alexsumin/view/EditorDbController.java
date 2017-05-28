@@ -347,13 +347,14 @@ public class EditorDbController {
 
 
         }
-        try {
-            main.loadUserScene(new Stage());
-            prevStage.close();
+        if (!Main.isAdmin())
+            try {
+                main.initScene(new Stage());
+                prevStage.close();
 
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        }
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
 
 
     }
