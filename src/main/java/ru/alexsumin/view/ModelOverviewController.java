@@ -108,11 +108,18 @@ public class ModelOverviewController {
     private Data dt;
     private Main main = new Main();
     private ObservableList<Result> results = FXCollections.observableArrayList();
-    //private boolean isAdmin = false;
     @FXML
     private ChoiceBox<IdTypePair> choiceBox = new ChoiceBox<>();
     double[] dataMaterial = new double[8];
     Material material;
+    public Stage stage;
+
+
+    Stage prevStage;
+
+    public void setPrevStage(Stage stage) {
+        this.prevStage = stage;
+    }
 
 
     public ModelOverviewController() {
@@ -457,13 +464,26 @@ public class ModelOverviewController {
 
             alert.showAndWait();
 
-            //return;
+
 
         }
 
-//        initialize();
+        try {
+            main.initScene(stage);
+            prevStage.close();
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+
 
     }
+
+//    @FXML
+//    private void CloseAction(ActionEvent event) {
+//        Stage stage = (Stage) close.getScene().getWindow();
+//        stage.close();
+//    }
+
 
     @FXML
     private void openAboutWindow(final ActionEvent event) {

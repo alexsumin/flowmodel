@@ -47,6 +47,14 @@ public class EditorDbController {
     ChangeMaterial changer;
     Material material;
     boolean isNew = false;
+    Main main = new Main();
+    ModelOverviewController contrlr = new ModelOverviewController();
+
+    Stage prevStage;
+
+    public void setPrevStage(Stage stage) {
+        this.prevStage = stage;
+    }
 
     public EditorDbController() {
 
@@ -58,6 +66,7 @@ public class EditorDbController {
 
     @FXML
     private void initialize() {
+
 
         changer = new ChangeMaterial();
         material = new Material();
@@ -322,6 +331,30 @@ public class EditorDbController {
             }
 
         });
+
+    }
+
+    @FXML
+    private void openChangeUserDialog(final ActionEvent e) {
+        if (!main.openLoginDialog()) {
+
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Ошибка");
+            alert.setHeaderText("Ошибка авторизации!");
+            alert.setContentText("Вы ввели неверные данные пользователя!");
+
+            alert.showAndWait();
+
+
+        }
+        try {
+            main.loadUserScene(new Stage());
+            prevStage.close();
+
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+
 
     }
 

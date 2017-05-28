@@ -10,7 +10,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import ru.alexsumin.view.EditorDbController;
+import ru.alexsumin.view.ModelOverviewController;
 
 import java.io.*;
 import java.util.Optional;
@@ -22,19 +25,16 @@ public class Main extends Application {
 
 
     public static String USER_PASSWORD = "password";
-    public static String CONFIG_FILE = "src/main/resources/config";
+    public static final String CONFIG_FILE = "src/main/resources/config";
     private static boolean isAdmin;
 
     public static boolean isAdmin() {
         return isAdmin;
     }
 
-    public void setAdmin(boolean admin) {
-        isAdmin = admin;
-    }
-
     @Override
     public void start(Stage primaryStage) throws Exception {
+
 
         readPassword();
         if (!openLoginDialog()) {
@@ -48,12 +48,63 @@ public class Main extends Application {
             return;
         }
 
-        Parent root = FXMLLoader.load(getClass().getResource("/view/ModelOverview.fxml"));
-        primaryStage.setTitle("Flowmodel");
-        primaryStage.setScene(new Scene(root, 1280, 800));
-        primaryStage.show();
+
+        initScene(primaryStage);
+
+
+        //loadUserScene(primaryStage);
     }
 
+
+    public void initScene(Stage primaryStage) throws IOException {
+        if (!isAdmin) {
+            primaryStage.setTitle("Flowmodel");
+
+            FXMLLoader myLoader = new FXMLLoader(getClass().getResource("/view/ModelOverview.fxml"));
+
+            Pane myPane = (Pane) myLoader.load();
+
+            ModelOverviewController modelController = (ModelOverviewController) myLoader.getController();
+
+            modelController.setPrevStage(primaryStage);
+
+            Scene myScene = new Scene(myPane);
+            primaryStage.setScene(myScene);
+            primaryStage.show();
+        } else {
+            primaryStage.setTitle("Редактирование базы данных");
+
+            FXMLLoader myLoader = new FXMLLoader(getClass().getResource("/view/EditorDb.fxml"));
+
+            Pane myPane = (Pane) myLoader.load();
+
+            EditorDbController editorController = (EditorDbController) myLoader.getController();
+
+            editorController.setPrevStage(primaryStage);
+
+            Scene myScene = new Scene(myPane);
+            primaryStage.setScene(myScene);
+            primaryStage.show();
+        }
+
+    }
+
+//    public  initScene(Stage stage) throws IOException
+//    {
+//        Main controller = new Main();
+//
+//        // Inflate FXML
+//        FXMLLoader loader = new FXMLLoader(Main.class.getResource("controller/login/Login.fxml"));
+//        loader.setController(controller);
+//        controller.root = loader.load(); // Good to have a pointer to the root node so the controller can be nested
+//
+//        // Create scene
+//        Scene scene = new Scene(controller.root);
+//        stage.setScene(scene);
+//        controller.onCreated(); // Method to let the controller know it has been inflated and added to a scene
+//
+//        return controller;
+//    }
 
     public boolean openLoginDialog() {
 
@@ -128,8 +179,10 @@ public class Main extends Application {
         LoginData ld = result.get();
 
 
-        if (ld.login.equals("Исследователь")) return true;
-        else if ((ld.login == "Администратор") && ld.password.equals(USER_PASSWORD)) {
+        if (ld.login.equals("Исследователь")) {
+            isAdmin = false;
+            return true;
+        } else if ((ld.login == "Администратор") && ld.password.equals(USER_PASSWORD)) {
             isAdmin = true;
             return true;
         }
@@ -150,6 +203,18 @@ public class Main extends Application {
 
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void loadUserScene(Stage primaryStage) throws IOException {
+        if (!isAdmin) {
+
+            Parent root = FXMLLoader.load(getClass().getResource("/view/ModelOverview.fxml"));
+            primaryStage.setTitle("Flowmodel");
+            primaryStage.setScene(new Scene(root, 1280, 800));
+            primaryStage.show();
+        } else {
+            showDatabaseEditDialog(primaryStage);
         }
     }
 
@@ -188,9 +253,6 @@ public class Main extends Application {
     }
 
 }
-
-
-
 
 
 class LoginData {

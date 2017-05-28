@@ -15,8 +15,9 @@
                         <Menu mnemonicParsing="false" text="База данных">
                             <items>
                                 <MenuItem mnemonicParsing="false" onAction="#copyDatabase" text="Экспортировать"/>
-                                <MenuItem mnemonicParsing="false" text="Импортировать"/>
-                                <MenuItem mnemonicParsing="false" text="Восстановить исходную"/>
+                                <MenuItem mnemonicParsing="false" onAction="#importDatabase" text="Импортировать"/>
+                                <MenuItem mnemonicParsing="false" onAction="#restoreDatabase"
+                                          text="Восстановить исходную"/>
                             </items>
                         </Menu>
                         <SeparatorMenuItem mnemonicParsing="false"/>
@@ -59,7 +60,7 @@
                 </Menu>
                 <Menu mnemonicParsing="false" text="Пользователь">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="Сменить пользователя"/>
+                        <MenuItem mnemonicParsing="false" text="Сменить пользователя" onAction="#openChangeUserDialog"/>
                         <MenuItem mnemonicParsing="false" text="Изменить пароль" onAction="#openChangePasswordDialog"/>
                     </items>
                 </Menu>
