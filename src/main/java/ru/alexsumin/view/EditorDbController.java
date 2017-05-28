@@ -9,6 +9,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.apache.commons.io.FileUtils;
 import ru.alexsumin.Main;
 import ru.alexsumin.model.ChangeMaterial;
 import ru.alexsumin.model.IdTypePair;
@@ -256,217 +257,74 @@ public class EditorDbController {
 
     }
 
-//    @FXML
-//    private void changePassword(){
-//
-//
-//        Dialog<String> dialog = new Dialog<>();
-//        dialog.setTitle("Change password dialog");
-//        dialog.setHeaderText("Смена пароля");
-//
-//
-//        ButtonType changeButton= new ButtonType("Сохранить", ButtonBar.ButtonData.OK_DONE);
-//
-//        dialog.getDialogPane().getButtonTypes().addAll(changeButton);
-//        //dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, ButtonType.CANCEL);
-//
-//
-//
-//        GridPane grid = new GridPane();
-//        grid.setHgap(10);
-//        grid.setVgap(10);
-//        PasswordField oldPassword = new PasswordField();
-//        oldPassword.setPromptText("Password");
-//        oldPassword.setTooltip(new Tooltip("Введите старый пароль"));
-//        Label lbl = new Label("Старый пароль");
-//        lbl.setVisible(false);
-//
-////        Node loginButton = dialog.getDialogPane().lookupButton(loginButtonType);
-////        loginButton.setDisable(true);
-//
-//
-//        dialog.getDialogPane().getButtonTypes().addAll(changeButton);
-//        //dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, ButtonType.CANCEL);
-//
-//
-//
-//
-//
-//
-//        dialog.getDialogPane().setContent(grid);
-//
-//
-//
-//        File file = new File("src/main/resources/", "config");
-//        try {
-//            try(BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/config"))){
-//                USER_PASSWORD = reader.readLine();
-//            }
-//        } catch (IOException e) {
-//            USER_PASSWORD = "password";
-//            try {
-//                try (BufferedWriter writer = new BufferedWriter(new FileWriter("src/main/resources/config"))) {
-//                    try {
-//                        writer.write(USER_PASSWORD);
-//                    } catch (IOException e1) {
-//                        e1.printStackTrace();
-//                    }
-//                }
-//            } catch (IOException e1) {
-//                e1.printStackTrace();
-//            }
-//        } ;
-//
-//    }
-
-
-//    @FXML
-//    private void openChangePasswordDialog() {
-//        //final PasswordPolicy passwordPolicy;
-//
-//        Dialog<String> dialog = new Dialog<>();
-//        dialog.setTitle("Change password dialog");
-//        dialog.setHeaderText("Смена пароля");
-//
-//
-//        dialog.showAndWait();
-//
-//        final PasswordField oldPasswordField = new PasswordField();
-//        final PasswordField newPasswordField = new PasswordField();
-//        final PasswordField confirmPasswordField = new PasswordField();
-//        final Label errorLabel = new Label();
-//        final Label guidelineLabel;
-//
-//        final DialogPane dialogPane = dialog.getDialogPane();
-//        dialogPane.getButtonTypes().addAll(
-//                ButtonType.CANCEL, ButtonType.OK
-//        );
-//
-//
-//        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.CANCEL, ButtonType.OK);
-//
-//
-//        VBox guidelineHolder = new VBox();
-//
-//        oldPasswordField.setPrefWidth(300);
-//        newPasswordField.setPrefWidth(300);
-//        confirmPasswordField.setPrefWidth(300);
-//
-//        Platform.runLater(oldPasswordField::requestFocus);
-//
-//        GridPane gridPane = new GridPane();
-//        gridPane.setHgap(10);
-//        gridPane.setVgap(10);
-//        gridPane.addRow(0,new
-//
-//        Label("Old Password"),oldPasswordField);
-//        gridPane.addRow(1,new
-//
-//        Label("New Password"),newPasswordField);
-//        gridPane.addRow(2,new
-//
-//        Label("Confirm New Password"),confirmPasswordField);
-//        gridPane.addRow(3,errorLabel);
-//        gridPane.addRow(4,guidelineHolder);
-//        GridPane.setColumnSpan(errorLabel,2);
-//        GridPane.setColumnSpan(guidelineHolder,2);
-//        guidelineLabel = new Label();
-//
-//    //this.passwordPolicy = passwordPolicy;
-//
-//        errorLabel.setStyle("-fx-text-fill: firebrick");
-//        Hyperlink showGuidelines = new Hyperlink("Show password guidelines");
-//        guidelineHolder.getChildren().add(showGuidelines);
-//        showGuidelines.setOnAction(event -> {
-//            if (!guidelineHolder.getChildren().contains(guidelineLabel)) {
-//                showGuidelines.setText("Hide password guidelines");
-//                guidelineHolder.getChildren().add(
-//                        guidelineLabel
-//                );
-//            } else {
-//                showGuidelines.setText("Show password guidelines");
-//                guidelineHolder.getChildren().remove(
-//                        guidelineLabel
-//                );
-//            }
-//
-//            guidelineHolder.getScene().getWindow().sizeToScene();
-//        });
-//
-//        dialogPane.setContent(
-//                gridPane
-//        );
-//
-//
-//
-//    }
-
 
     @FXML
     private void openChangePasswordDialog(final ActionEvent event) {
-        Dialog<String> dialog = new Dialog<>();
-        dialog.setTitle("Login Dialog");
-        dialog.setHeaderText("Login Dialog");
 
 
-// Set the button types.
-        ButtonType loginButtonType = new ButtonType("Change", ButtonBar.ButtonData.OK_DONE);
-        dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, ButtonType.CANCEL);
+        Dialog dialog = new Dialog();
 
-// Create the username and password labels and fields.
+        ButtonType changeButtonType = new ButtonType("Change", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(changeButtonType, ButtonType.CANCEL);
+
         GridPane grid = new GridPane();
         grid.setHgap(10);
         grid.setVgap(10);
-        grid.setPadding(new Insets(20, 150, 10, 10));
+        grid.setPadding(new Insets(20, 70, 10, 10));
 
         PasswordField oldpass = new PasswordField();
-        oldpass.setPromptText("Username");
+        oldpass.setPromptText("Пароль");
         PasswordField newpass = new PasswordField();
-        newpass.setPromptText("Password");
-        PasswordField confirmpass = new PasswordField();
+        newpass.setPromptText("Новый пароль");
 
-        grid.add(new Label("Старый пароль:"), 0, 0);
+        grid.add(new Label("Пароль:"), 0, 0);
         grid.add(oldpass, 1, 0);
         grid.add(new Label("Новый пароль:"), 0, 1);
         grid.add(newpass, 1, 1);
-        grid.add(new Label("Подтвердите пароль:"), 0, 2);
-        grid.add(confirmpass, 1, 2);
 
 
-// Enable/Disable login button depending on whether a username was entered.
-        Node loginButton = dialog.getDialogPane().lookupButton(loginButtonType);
-        loginButton.setDisable(true);
+        Node changeButton = dialog.getDialogPane().lookupButton(changeButtonType);
+        changeButton.setDisable(true);
 
-// Do some validation (using the Java 8 lambda syntax).
         oldpass.textProperty().addListener((observable, oldValue, newValue) -> {
-            loginButton.setDisable(newValue.trim().isEmpty());
-            if (newValue == Main.USER_PASSWORD) {
-
+            changeButton.setDisable(newValue.trim().isEmpty());
+            if (newValue.equals(Main.USER_PASSWORD)) {
+                newpass.setEditable(true);
             }
         });
 
 
         dialog.getDialogPane().setContent(grid);
-        dialog.showAndWait();
+        dialog.show();
 
-// Request focus on the username field by default.
-        //Platform.runLater(() -> username.requestFocus());
 
-// Convert the result to a username-password-pair when the login button is clicked.
-//        dialog.setResultConverter(dialogButton -> {
-//            if (dialogButton == loginButtonType) {
-//                return new Pair<>(username.getText(), password.getText());
-//            }
-//            return null;
-//        });
-//
-//        Optional<Pair<String, String>> result = dialog.showAndWait();
-//
-//        result.ifPresent(usernamePassword -> {
-//            System.out.println("Username=" + usernamePassword.getKey() + ", Password=" + usernamePassword.getValue());
-//        });
+        changeButton.addEventFilter(ActionEvent.ACTION, ev -> {
+            if (!newpass.getText().isEmpty()) {
+                String tempPass = newpass.getText();
+                System.out.println("считан пароль");
+                File sourceFile = new File("src/main/resources/temp");
+                File fileToCopy = new File(Main.CONFIG_FILE);
+
+                try {
+                    FileUtils.writeStringToFile(sourceFile, tempPass, "UTF8");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    FileUtils.copyFile(sourceFile, fileToCopy);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                Main.USER_PASSWORD = tempPass;
+                org.apache.commons.io.FileUtils.deleteQuietly(sourceFile);
+            }
+
+        });
 
     }
+
 
     @FXML
     private void focusOnDensityField(final ActionEvent e) {

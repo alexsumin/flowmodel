@@ -22,6 +22,7 @@ public class Main extends Application {
 
 
     public static String USER_PASSWORD = "password";
+    public static String CONFIG_FILE = "src/main/resources/config";
     private static boolean isAdmin;
 
     public static boolean isAdmin() {
@@ -153,12 +154,22 @@ public class Main extends Application {
     }
 
     private void readPassword() {
+
+
         File file = new File("src/main/resources/", "config");
-        try {
+
+        if (file.exists()) {
+
             try (BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/config"))) {
                 USER_PASSWORD = reader.readLine();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        } catch (IOException e) {
+        } else {
+
+
             USER_PASSWORD = "password";
             try {
                 try (BufferedWriter writer = new BufferedWriter(new FileWriter("src/main/resources/config"))) {
@@ -172,7 +183,7 @@ public class Main extends Application {
                 e1.printStackTrace();
             }
         }
-        ;
+
 
     }
 
