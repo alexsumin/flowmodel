@@ -23,8 +23,8 @@ public class Material {
     }
 
     private Connection connect() {
-        // SQLite connection string
-        String url = "jdbc:sqlite:src/main/resources/database/Material_Database.s3db";
+
+        String url = "jdbc:sqlite:database/Material_Database.s3db";
         Connection conn = null;
         try {
             conn = DriverManager.getConnection(url);
@@ -47,20 +47,16 @@ public class Material {
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
 
-            // loop through the result set
             while (rs.next()) {
                 materialType = rs.getString("material_type");
                 idMaterial = rs.getInt("id_material");
                 IdTypePair pair = new IdTypePair(idMaterial, materialType);
-//                System.out.println(materialType);
                 System.out.println(idMaterial);
-//                System.out.println(pair);
                 materials.add(pair);
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-//        System.out.println(materials);
         return materials;
     }
 
@@ -74,7 +70,6 @@ public class Material {
              Statement stmt1 = conn1.createStatement();
              ResultSet rs1 = stmt1.executeQuery(sql1)) {
 
-            // loop through the result set
             while (rs1.next()) {
                 density = rs1.getDouble("charact_value");
                 System.out.println(density);
@@ -93,8 +88,6 @@ public class Material {
         try (Connection conn2 = this.connect();
              Statement stmt2 = conn2.createStatement();
              ResultSet rs2 = stmt2.executeQuery(sql2)) {
-
-            // loop through the result set
             while (rs2.next()) {
                 capacity = rs2.getDouble("charact_value");
                 System.out.println(capacity);
@@ -113,8 +106,6 @@ public class Material {
         try (Connection conn3 = this.connect();
              Statement stmt3 = conn3.createStatement();
              ResultSet rs3 = stmt3.executeQuery(sql3)) {
-
-            // loop through the result set
             while (rs3.next()) {
                 meltingTemperature = rs3.getDouble("charact_value");
                 System.out.println(meltingTemperature);
@@ -133,8 +124,6 @@ public class Material {
         try (Connection conn4 = this.connect();
              Statement stmt4 = conn4.createStatement();
              ResultSet rs4 = stmt4.executeQuery(sql4)) {
-
-            // loop through the result set
             while (rs4.next()) {
                 consFactorWithReduction = rs4.getDouble("charact_value");
                 System.out.println(consFactorWithReduction);
@@ -153,8 +142,6 @@ public class Material {
         try (Connection conn5 = this.connect();
              Statement stmt5 = conn5.createStatement();
              ResultSet rs5 = stmt5.executeQuery(sql5)) {
-
-            // loop through the result set
             while (rs5.next()) {
                 viscosityFactor = rs5.getDouble("charact_value");
                 System.out.println(viscosityFactor);
@@ -174,7 +161,6 @@ public class Material {
              Statement stmt6 = conn6.createStatement();
              ResultSet rs6 = stmt6.executeQuery(sql6)) {
 
-            // loop through the result set
             while (rs6.next()) {
                 reductionTemperature = rs6.getDouble("charact_value");
                 System.out.println(reductionTemperature);
@@ -193,8 +179,6 @@ public class Material {
         try (Connection conn7 = this.connect();
              Statement stmt7 = conn7.createStatement();
              ResultSet rs7 = stmt7.executeQuery(sql7)) {
-
-            // loop through the result set
             while (rs7.next()) {
                 flowIndex = rs7.getDouble("charact_value");
                 System.out.println(flowIndex);
@@ -213,8 +197,6 @@ public class Material {
         try (Connection conn8 = this.connect();
              Statement stmt8 = conn8.createStatement();
              ResultSet rs8 = stmt8.executeQuery(sql8)) {
-
-            // loop through the result set
             while (rs8.next()) {
                 emissionFactor = rs8.getDouble("charact_value");
                 System.out.println(emissionFactor);

@@ -88,7 +88,6 @@ public class Data {
     }
 
     public void calcNumberOfIterations() {
-        //numberOfIterations = Math.floor(length / lengthStep);
         numberOfIterations = (int) (length / lengthStep);
     }
 

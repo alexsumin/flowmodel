@@ -140,7 +140,6 @@ public class ModelOverviewController {
         refreshChoiceBox();
 
 
-
         choiceBox.getSelectionModel().selectFirst();
 
 
@@ -163,7 +162,6 @@ public class ModelOverviewController {
 
         tableWithResult.setEditable(true);
         tableWithResult.setItems(results);
-
 
 
         for (TextField tf : fields) {
@@ -217,7 +215,6 @@ public class ModelOverviewController {
             }
         });
     }
-
 
 
     @FXML
@@ -410,7 +407,6 @@ public class ModelOverviewController {
     private void enterSpinner() {
         enterKeyEventHandler = event -> {
 
-            // handle users "enter key event"
             if (event.getCode() == KeyCode.ENTER) {
 
                 try {
@@ -418,9 +414,6 @@ public class ModelOverviewController {
                     Double.valueOf(stepField.getEditor().textProperty().get().replace(",", "."));
                 } catch (NumberFormatException e) {
 
-                    // show message to user: "only numbers allowed"
-
-                    // reset editor to INITIAL_VALUE
                     stepField.getEditor().textProperty().set(STEP_VALUE);
                 }
             }
@@ -488,9 +481,9 @@ public class ModelOverviewController {
                 "\n                                            Анпилова А.В., " +
                 "\n                                            Демьяненко А.В., \n" +
                 "                                            Сумин А.П. \n" +
-                        "Руководитель: кандидат технических наук, доцент кафедры САПРиУ СПбГТИ(ТУ) " +
+                "Руководитель: кандидат технических наук, доцент кафедры САПРиУ СПбГТИ(ТУ) " +
                 "\n                                    Полосин Андрей Николаевич\n\n" +
-                        "                                            СПбГТИ(ТУ), 2017");
+                "                                            СПбГТИ(ТУ), 2017");
         alert.showAndWait();
     }
 

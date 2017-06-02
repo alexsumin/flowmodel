@@ -8,6 +8,7 @@ import java.sql.*;
  */
 public class ChangeMaterial {
 
+
     private double newDensity, newCapacity, newMeltingTemperature, newViscosityFactor, newReductionTemperature,
             newFlowIndex, newEmissionFactor, newConsFactorWithReduction;
 
@@ -24,88 +25,9 @@ public class ChangeMaterial {
     }
 
 
-    /*
-    public void setDensity() {
-        Scanner Density = new Scanner(System.in);
-        System.out.println("\nВведите плотность материала:");
-        newDensity = Density.nextDouble();
-        //newDensity = 1200;
-    }
-
-    public void setCapacity() {
-        Scanner Capacity = new Scanner(System.in);
-        System.out.println("\nВведите удельную теплоёмкость материала:");
-        newCapacity = Capacity.nextDouble();
-        //newCapacity = 2100;
-    }
-
-    public void setMeltingTemperarure() {
-        Scanner MeltingTemperature = new Scanner(System.in);
-        System.out.println("\nВведите температуру плавления материала:");
-        newMeltingTemperature = MeltingTemperature.nextDouble();
-        //newMeltingTemperature = 140;
-    }
-
-    public void setConsFactorWithReduction() {
-        Scanner ConsFactorWithReduction = new Scanner(System.in);
-        System.out.println("\nВведите коэффициент консистенции материала при температуре приведения:");
-        newConsFactorWithReduction = ConsFactorWithReduction.nextDouble();
-        //newConsFactorWithReduction = 10000;
-    }
-
-    public void setViscosityFactor() {
-        Scanner ViscosityFactor = new Scanner(System.in);
-        System.out.println("\nВведите температурный коэффициент вязкости материала:");
-        newViscosityFactor = ViscosityFactor.nextDouble();
-        //newViscosityFactor = 0.04;
-    }
-
-    public void setReductionTemperature() {
-        Scanner ReductionTemperature = new Scanner(System.in);
-        System.out.println("\nВведите температуру приведения материала:");
-        newReductionTemperature = ReductionTemperature.nextDouble();
-        //newReductionTemperature = 170;
-    }
-
-    public void setFlowIndex() {
-        Scanner FlowIndex = new Scanner(System.in);
-        System.out.println("\nВведите индекс течения материала:");
-        newFlowIndex = FlowIndex.nextDouble();
-        //newFlowIndex = 0.3;
-    }
-
-    public void setEmissionFactor() {
-        Scanner EmissionFactor = new Scanner(System.in);
-        System.out.println("\nВведите коэффициент теплоотдачи от крышки канала к материалу:");
-        newEmissionFactor = EmissionFactor.nextDouble();
-        //newEmissionFactor = 450;
-    }
-
-
-
-    public void setCharactValues() {
-        setDensity();
-        setCapacity();
-        setMeltingTemperarure();
-        setConsFactorWithReduction();
-        setViscosityFactor();
-        setReductionTemperature();
-        setFlowIndex();
-        setEmissionFactor();
-    }
-
-
-    public void setMaterial() {
-        setMaterialType();
-        setCharactValues();
-    }
-
-    */
-
     public void setMaterial(String s) {
         material_type = s;
     }
-
 
 
     public void setData(String type, int id, double[] data) {
@@ -121,12 +43,11 @@ public class ChangeMaterial {
         id_material = id;
 
 
-
     }
 
     private Connection connect() {
-        // SQLite connection string
-        String url = "jdbc:sqlite:src/main/resources/database/Material_Database.s3db";
+
+        String url = "jdbc:/sqlite:database/Material_Database.s3db";
         Connection conn = null;
         try {
             conn = DriverManager.getConnection(url);
@@ -144,7 +65,6 @@ public class ChangeMaterial {
              Statement maxIdStmt = maxIdConn.createStatement();
              ResultSet maxIdRs = maxIdStmt.executeQuery(maxIdSql)) {
 
-            // loop through the result set
             while (maxIdRs.next()) {
                 id_material = maxIdRs.getInt("MAX(id_material)");
                 System.out.println(id_material);
@@ -156,8 +76,6 @@ public class ChangeMaterial {
     }
 
 
-    //вставка значений
-
     private void insertMaterial() {
         String upSql = "INSERT INTO Material (id_material, material_type)\n" +
                 "VALUES (" + id_material + ", '" + material_type + "');";
@@ -166,7 +84,6 @@ public class ChangeMaterial {
         try (Connection upConn = this.connect();
              Statement upStmt = upConn.createStatement();
              ResultSet upRs = upStmt.executeQuery(upSql)) {
-            // loop through the result set
             while (upRs.next()) {
             }
         } catch (SQLException e) {
@@ -184,7 +101,7 @@ public class ChangeMaterial {
         try (Connection upConn1 = this.connect();
              Statement upStmt1 = upConn1.createStatement();
              ResultSet upRs1 = upStmt1.executeQuery(upSql1)) {
-            // loop through the result set
+
             while (upRs1.next()) {
             }
         } catch (SQLException e) {
@@ -193,13 +110,11 @@ public class ChangeMaterial {
     }
 
     public void insertDbRecords() {
-        //setIdMaterial(1);
+
         insertMaterial();
         insertCharactValues();
     }
 
-
-    //методы обновляющие по одной записи в бд
 
     private void updateMaterial() {
         String updSql = "UPDATE Material SET material_type = '" + material_type + "'\n" +
@@ -208,7 +123,6 @@ public class ChangeMaterial {
         try (Connection updConn = this.connect();
              Statement updStmt = updConn.createStatement();
              ResultSet updRs = updStmt.executeQuery(updSql)) {
-            // loop through the result set
             while (updRs.next()) {
             }
         } catch (SQLException e) {
@@ -223,7 +137,6 @@ public class ChangeMaterial {
         try (Connection updConn1 = this.connect();
              Statement updStmt1 = updConn1.createStatement();
              ResultSet updRs1 = updStmt1.executeQuery(updSql1)) {
-            // loop through the result set
             while (updRs1.next()) {
             }
         } catch (SQLException e) {
@@ -238,7 +151,6 @@ public class ChangeMaterial {
         try (Connection updConn2 = this.connect();
              Statement updStmt2 = updConn2.createStatement();
              ResultSet updRs2 = updStmt2.executeQuery(updSql2)) {
-            // loop through the result set
             while (updRs2.next()) {
             }
         } catch (SQLException e) {
@@ -253,7 +165,6 @@ public class ChangeMaterial {
         try (Connection updConn3 = this.connect();
              Statement updStmt3 = updConn3.createStatement();
              ResultSet updRs3 = updStmt3.executeQuery(updSql3)) {
-            // loop through the result set
             while (updRs3.next()) {
             }
         } catch (SQLException e) {
@@ -268,7 +179,6 @@ public class ChangeMaterial {
         try (Connection updConn4 = this.connect();
              Statement updStmt4 = updConn4.createStatement();
              ResultSet updRs4 = updStmt4.executeQuery(updSql4)) {
-            // loop through the result set
             while (updRs4.next()) {
             }
         } catch (SQLException e) {
@@ -283,7 +193,6 @@ public class ChangeMaterial {
         try (Connection updConn5 = this.connect();
              Statement updStmt5 = updConn5.createStatement();
              ResultSet updRs5 = updStmt5.executeQuery(updSql5)) {
-            // loop through the result set
             while (updRs5.next()) {
             }
         } catch (SQLException e) {
@@ -298,7 +207,6 @@ public class ChangeMaterial {
         try (Connection updConn6 = this.connect();
              Statement updStmt6 = updConn6.createStatement();
              ResultSet updRs6 = updStmt6.executeQuery(updSql6)) {
-            // loop through the result set
             while (updRs6.next()) {
             }
         } catch (SQLException e) {
@@ -313,7 +221,6 @@ public class ChangeMaterial {
         try (Connection updConn7 = this.connect();
              Statement updStmt7 = updConn7.createStatement();
              ResultSet updRs7 = updStmt7.executeQuery(updSql7)) {
-            // loop through the result set
             while (updRs7.next()) {
             }
         } catch (SQLException e) {
@@ -328,15 +235,12 @@ public class ChangeMaterial {
         try (Connection updConn8 = this.connect();
              Statement updStmt8 = updConn8.createStatement();
              ResultSet updRs8 = updStmt8.executeQuery(updSql8)) {
-            // loop through the result set
             while (updRs8.next()) {
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
     }
-
-    //метод вызывает все методы на обновление записей
 
     private void updateCharactValues() {
         updateDensity();
@@ -358,7 +262,6 @@ public class ChangeMaterial {
 
 
     private void changeDbRecords() {
-        //setMaterial();
         setIdMaterial(0);
         if (id_material == 0) {
             insertDbRecords();
@@ -375,7 +278,6 @@ public class ChangeMaterial {
              Statement idStmt = idConn.createStatement();
              ResultSet idRs = idStmt.executeQuery(idSql)) {
 
-            // loop through the result set
             while (idRs.next()) {
                 id_material = idRs.getInt("id_material");
                 System.out.println(id_material);
@@ -393,7 +295,6 @@ public class ChangeMaterial {
         try (Connection delConn = this.connect();
              Statement delStmt = delConn.createStatement();
              ResultSet delRs = delStmt.executeQuery(delSql)) {
-            // loop through the result set
             while (delRs.next()) {
             }
         } catch (SQLException e) {
@@ -408,7 +309,6 @@ public class ChangeMaterial {
         try (Connection delConn = this.connect();
              Statement delStmt = delConn.createStatement();
              ResultSet delRs = delStmt.executeQuery(delSql)) {
-            // loop through the result set
             while (delRs.next()) {
             }
         } catch (SQLException e) {

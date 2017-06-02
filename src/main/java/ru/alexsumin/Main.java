@@ -25,7 +25,7 @@ public class Main extends Application {
 
 
     public static String USER_PASSWORD = "password";
-    public static final String CONFIG_FILE = "src/main/resources/config";
+    public static final String CONFIG_FILE = "/src/main/resources/config";
     private static boolean isAdmin;
 
     public static boolean isAdmin() {
@@ -52,7 +52,6 @@ public class Main extends Application {
         initScene(primaryStage);
 
 
-        //loadUserScene(primaryStage);
     }
 
 
@@ -89,22 +88,6 @@ public class Main extends Application {
 
     }
 
-//    public  initScene(Stage stage) throws IOException
-//    {
-//        Main controller = new Main();
-//
-//        // Inflate FXML
-//        FXMLLoader loader = new FXMLLoader(Main.class.getResource("controller/login/Login.fxml"));
-//        loader.setController(controller);
-//        controller.root = loader.load(); // Good to have a pointer to the root node so the controller can be nested
-//
-//        // Create scene
-//        Scene scene = new Scene(controller.root);
-//        stage.setScene(scene);
-//        controller.onCreated(); // Method to let the controller know it has been inflated and added to a scene
-//
-//        return controller;
-//    }
 
     public boolean openLoginDialog() {
 
@@ -206,26 +189,17 @@ public class Main extends Application {
         }
     }
 
-    public void loadUserScene(Stage primaryStage) throws IOException {
-        if (!isAdmin) {
-
-            Parent root = FXMLLoader.load(getClass().getResource("/view/ModelOverview.fxml"));
-            primaryStage.setTitle("Flowmodel");
-            primaryStage.setScene(new Scene(root, 1280, 800));
-            primaryStage.show();
-        } else {
-            showDatabaseEditDialog(primaryStage);
-        }
-    }
 
     private void readPassword() {
 
 
-        File file = new File("src/main/resources/", "config");
+        File file = new File("/src/main/resources/config");
+
 
         if (file.exists()) {
 
-            try (BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/config"))) {
+
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("config")))) {
                 USER_PASSWORD = reader.readLine();
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -236,23 +210,15 @@ public class Main extends Application {
 
 
             USER_PASSWORD = "password";
-            try {
-                try (BufferedWriter writer = new BufferedWriter(new FileWriter("src/main/resources/config"))) {
-                    try {
-                        writer.write(USER_PASSWORD);
-                    } catch (IOException e1) {
-                        e1.printStackTrace();
-                    }
-                }
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter("config"))) {
+                writer.write(USER_PASSWORD);
+
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
         }
 
-
     }
-
-}
 
 
 class LoginData {
@@ -264,4 +230,5 @@ class LoginData {
         this.login = login;
         this.password = password;
     }
+}
 }
